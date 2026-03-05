@@ -3,11 +3,11 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using cakeTodoList.Data;
+using southernTravel.Data;
 
 #nullable disable
 
-namespace cakeTodoList.Migrations
+namespace southernTravel.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -17,7 +17,7 @@ namespace cakeTodoList.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.3");
 
-            modelBuilder.Entity("cakeTodoList.Model.Products", b =>
+            modelBuilder.Entity("southernTravel.Model.Products", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

@@ -1,6 +1,0 @@
-@cakeTodoList_HostAddress = http://localhost:5084
-
-GET {{cakeTodoList_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

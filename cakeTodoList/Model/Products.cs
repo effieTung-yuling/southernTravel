@@ -1,4 +1,4 @@
-﻿namespace cakeTodoList.Model
+﻿namespace southernTravel.Model
 {
     public class Products
     {

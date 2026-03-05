@@ -1,8 +1,8 @@
-﻿using cakeTodoList.Data;
-using cakeTodoList.Model;
+﻿using southernTravel.Data;
+using southernTravel.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace cakeTodoList.Repositories
+namespace southernTravel.Repositories
 {
     public class ProductsRepositories
     {

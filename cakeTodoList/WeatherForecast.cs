@@ -1,4 +1,4 @@
-namespace cakeTodoList
+namespace southernTravel
 {
     public class WeatherForecast
     {

@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using cakeTodoList.Data;
+using southernTravel.Data;
 
 #nullable disable
 
-namespace cakeTodoList.Migrations
+namespace southernTravel.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20260211093906_InitialDB")]
@@ -19,7 +19,7 @@ namespace cakeTodoList.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.3");
 
-            modelBuilder.Entity("cakeTodoList.Model.Products", b =>
+            modelBuilder.Entity("southernTravel.Model.Products", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

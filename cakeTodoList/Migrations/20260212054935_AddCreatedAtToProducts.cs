@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace cakeTodoList.Migrations
+namespace southernTravel.Migrations
 {
     /// <inheritdoc />
     public partial class AddCreatedAtToProducts : Migration

@@ -1,8 +1,8 @@
-﻿using cakeTodoList.Model;
-using cakeTodoList.Services;
+﻿using southernTravel.Model;
+using southernTravel.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace cakeTodoList.Controllers
+namespace southernTravel.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace cakeTodoList.Controllers
+namespace southernTravel.Controllers
 {
     [ApiController]
     [Route("[controller]")]

@@ -1,7 +1,7 @@
-﻿using cakeTodoList.Model;
-using cakeTodoList.Repositories;
+﻿using southernTravel.Model;
+using southernTravel.Repositories;
 
-namespace cakeTodoList.Services
+namespace southernTravel.Services
 {
     public class ProductsServices
     {

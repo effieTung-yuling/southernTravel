@@ -1,6 +1,6 @@
-﻿namespace cakeTodoList.Data
+﻿namespace southernTravel.Data
 {
-    using cakeTodoList.Model;
+    using southernTravel.Model;
     using Microsoft.EntityFrameworkCore;
     public class AppDbContext:DbContext
     {

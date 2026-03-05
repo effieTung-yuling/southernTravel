@@ -1,6 +1,6 @@
-using cakeTodoList.Data;
-using cakeTodoList.Repositories;
-using cakeTodoList.Services;
+using southernTravel.Data;
+using southernTravel.Repositories;
+using southernTravel.Services;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
