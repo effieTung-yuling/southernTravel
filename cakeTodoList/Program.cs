@@ -32,7 +32,8 @@ else
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseNpgsql(connectionString));
 }
-
+builder.Services.AddScoped<MembersRepositories>();
+builder.Services.AddScoped<MembersServices>();
 builder.Services.AddScoped<ProductsRepositories>();
 builder.Services.AddScoped<ProductsServices>();
 builder.Services.AddControllers();
@@ -53,7 +54,7 @@ app.MapScalarApiReference(options => {
 app.UseAuthorization();
 app.MapControllers();
 
-// 自動建立資料表
+//自動建立資料表
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
