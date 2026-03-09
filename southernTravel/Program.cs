@@ -55,32 +55,32 @@ app.UseAuthorization();
 app.MapControllers();
 
 ////自動建立資料表
-//using (var scope = app.Services.CreateScope())
-//{
-//    var services = scope.ServiceProvider;
-//    try
-//    {
-//        var context = services.GetRequiredService<AppDbContext>();
-//        // 加一行測試連線
-//        var canConnect = context.Database.CanConnect();
-//        if (canConnect)
-//        {
-//            context.Database.EnsureCreated();
-//            Console.WriteLine("✅ 資料庫連線與初始化成功！");
-//        }
-//        else
-//        {
-//            Console.WriteLine("❌ 無法連線到資料庫，請檢查連線字串。");
-//        }
-//    }
-//    catch (Exception ex)
-//    {
-//        // 這一行非常重要，會告訴我們具體錯在哪
-//        Console.WriteLine($"🔥 啟動錯誤: {ex.Message}");
-//        if (ex.InnerException != null)
-//            Console.WriteLine($"🔥 詳細原因: {ex.InnerException.Message}");
-//    }
-//}
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+        // 加一行測試連線
+        var canConnect = context.Database.CanConnect();
+        if (canConnect)
+        {
+            context.Database.EnsureCreated();
+            Console.WriteLine("✅ 資料庫連線與初始化成功！");
+        }
+        else
+        {
+            Console.WriteLine("❌ 無法連線到資料庫，請檢查連線字串。");
+        }
+    }
+    catch (Exception ex)
+    {
+        // 這一行非常重要，會告訴我們具體錯在哪
+        Console.WriteLine($"🔥 啟動錯誤: {ex.Message}");
+        if (ex.InnerException != null)
+            Console.WriteLine($"🔥 詳細原因: {ex.InnerException.Message}");
+    }
+}
 
 if (app.Environment.IsDevelopment())
 {
