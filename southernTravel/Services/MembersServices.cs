@@ -3,7 +3,15 @@ using southernTravel.Repositories;
 
 namespace southernTravel.Services
 {
-    public class MembersServices
+    // 定義介面 (Interface)
+    public interface IMembersService
+    {
+        bool IsEmailExists(string email);
+        void RegisterMember(Member member);
+    }
+
+    // 實作介面
+    public class MembersServices : IMembersService
     {
         private readonly MembersRepositories _repo;
 
@@ -12,20 +20,14 @@ namespace southernTravel.Services
             _repo = repo;
         }
 
-        // --- 補上這一段，錯誤就會消失 ---
         public bool IsEmailExists(string email)
         {
-            // 轉手交給 Repository 去查資料庫
             return _repo.CheckEmailExists(email);
         }
-        // ----------------------------
 
         public void RegisterMember(Member member)
         {
-            if (_repo.CheckEmailExists(member.Email))
-            {
-                throw new Exception("Email 已存在");
-            }
+            // 你原本的邏輯
             _repo.Create(member);
         }
     }

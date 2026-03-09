@@ -1,9 +1,10 @@
+using FluentValidation;
+using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 using southernTravel.Data;
 using southernTravel.Repositories;
 using southernTravel.Services;
-using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
-
+using southernTravel.Validators;
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. 註冊 CORS 服務
@@ -36,6 +37,11 @@ builder.Services.AddScoped<MembersRepositories>();
 builder.Services.AddScoped<MembersServices>();
 builder.Services.AddScoped<ProductsRepositories>();
 builder.Services.AddScoped<ProductsServices>();
+builder.Services.AddScoped<IMembersService, MembersServices>();
+// 註冊所有在目前 Assembly 中的 Validator
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
+
+// 註冊 Controller
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 

@@ -1,47 +1,60 @@
-﻿using southernTravel.Model;
-using southernTravel.Services;
+﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using southernTravel.Model;
+using southernTravel.Services;
+using System.ComponentModel.DataAnnotations;
 
 namespace southernTravel.Controllers
 {
     [ApiController]
-    [Route("api/[Controller]")] // 建議統一用 api/ 開頭
-    public class MembersController : ControllerBase // 必須繼承 ControllerBase 才能使用 Ok() 或 BadRequest()
+    [Route("api/[controller]")]
+    public class UserController : ControllerBase
     {
-        private readonly MembersServices _service;
-
-        // 注入你的 Service
-        public MembersController(MembersServices service)
+        private readonly IMembersService _service;
+        private readonly IValidator<RegisterRequest> _validator;
+        public UserController(IMembersService service, IValidator<RegisterRequest> validator)
         {
             _service = service;
+            _validator = validator;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
+            // 2. 基本 null 檢查
             if (request == null) return BadRequest("資料不能為空");
+
+            // 3. 格式校驗 (Email格式、電話、密碼大寫等)
+            var validationResult = await _validator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                // 將 FluentValidation 的錯誤訊息轉成 API 格式回傳
+                return BadRequest(new
+                {
+                    errors = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
+                });
+            }
 
             try
             {
-                // 1. 檢查 Email 是否重複 (交給 Service 去處理)
+                // 4. 業務邏輯檢查 (Email 是否重複)
                 if (_service.IsEmailExists(request.Email))
                 {
                     return BadRequest("該 Email 已經被註冊過了。");
                 }
 
-                // 2. 建立新會員物件 (將 DTO 轉為實體 Model)
+                // 5. 實體轉換與存檔
                 var newMember = new Member
                 {
                     Name = request.Name,
                     Email = request.Email,
-                    PasswordHash = request.Password, // 暫時明碼存儲
+                    PasswordHash = request.Password, // 提醒：實務上建議使用 Hash 處理
                     PhoneNumber = request.PhoneNumber,
                     Birthday = request.Birthday,
                     IsActive = true,
                     CreatedAt = DateTime.Now
                 };
 
-                // 3. 呼叫 Service 存入資料庫
                 _service.RegisterMember(newMember);
 
                 return Ok(new { message = "註冊成功！", userId = newMember.Id });
