@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using southernTravel.Data;
@@ -37,7 +38,26 @@ builder.Services.AddScoped<MembersRepositories>();
 builder.Services.AddScoped<MembersServices>();
 builder.Services.AddScoped<ProductsRepositories>();
 builder.Services.AddScoped<ProductsServices>();
+
 builder.Services.AddScoped<IMembersService, MembersServices>();
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var errors = context.ModelState
+            .Where(e => e.Value.Errors.Count > 0)
+            .ToDictionary(
+                kvp => kvp.Key,
+                kvp => kvp.Value.Errors.Select(er => er.ErrorMessage).ToArray()
+            );
+
+        return new BadRequestObjectResult(new
+        {
+            message = "資料驗證失敗",
+            errors
+        });
+    };
+});
 // 註冊所有在目前 Assembly 中的 Validator
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
 

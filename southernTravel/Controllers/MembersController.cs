@@ -50,7 +50,7 @@ namespace southernTravel.Controllers
                     Email = request.Email,
                     PasswordHash = request.Password, // 提醒：實務上建議使用 Hash 處理
                     PhoneNumber = request.PhoneNumber,
-                    Birthday = request.Birthday,
+                    Birthday = request.Birthday.Value,
                     IsActive = true,
                     CreatedAt = DateTime.Now
                 };
