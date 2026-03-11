@@ -1,6 +1,6 @@
 ﻿namespace southernTravel.DTOs
 {
-    /// 這裡定義了三個 DTO 類別：CreateAttractionDto、UpdateAttractionDto 和 AttractionDto
+    /// 這裡定義了三個 DTO 類別：CreateAttractionDto、UpdatedAttractionDto 和 AttractionDto
     public class CreateAttractionDto
     {
         public string Title { get; set; } = string.Empty;
@@ -14,7 +14,7 @@
         public string? Location { get; set; }
     }
 
-    public class UpdateAttractionDto
+    public class UpdatedAttractionDto
     {
         public string Title { get; set; } = string.Empty;
 

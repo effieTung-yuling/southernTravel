@@ -39,7 +39,7 @@ public class AttractionsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, UpdateAttractionDto dto)
+    public async Task<IActionResult> Update(int id, UpdatedAttractionDto dto)
     {
         var success = await _service.UpdateAsync(id, dto);
 

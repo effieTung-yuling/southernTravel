@@ -54,7 +54,7 @@ namespace southernTravel.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("title");
 
-                    b.Property<DateTime?>("UpdateAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT")
                         .HasColumnName("updated_at");
 

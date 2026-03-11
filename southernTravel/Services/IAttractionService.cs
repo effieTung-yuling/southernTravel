@@ -8,7 +8,7 @@ public interface IAttractionService
 
     Task<AttractionDto> CreateAsync(CreateAttractionDto dto);
 
-    Task<bool> UpdateAsync(int id, UpdateAttractionDto dto);
+    Task<bool> UpdateAsync(int id, UpdatedAttractionDto dto);
 
     Task<bool> DeleteAsync(int id);
 }

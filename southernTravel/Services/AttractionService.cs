@@ -68,7 +68,7 @@ public class AttractionService : IAttractionService
         };
     }
 
-    public async Task<bool> UpdateAsync(int id, UpdateAttractionDto dto)
+    public async Task<bool> UpdateAsync(int id, UpdatedAttractionDto dto)
     {
         var attraction = await _repository.GetByIdAsync(id);
 
@@ -80,7 +80,7 @@ public class AttractionService : IAttractionService
         attraction.MainImageUrl = dto.MainImageUrl;
         attraction.Location = dto.Location;
         attraction.IsActive = dto.IsActive;
-        attraction.UpdateAt = DateTime.UtcNow;
+        attraction.UpdatedAt = DateTime.UtcNow;
 
         await _repository.UpdateAsync(attraction);
 
