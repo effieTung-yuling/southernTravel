@@ -23,16 +23,7 @@ namespace southernTravel.Validators
                 .Matches(@"[A-Z]").WithMessage("密碼必須包含一個大寫英文字母");
             RuleFor(x => x.Birthday)
                 .NotEmpty().WithMessage("生日必填")
-                .Must(b =>
-                {
-                    // 先嘗試 parse
-                    if (DateTime.TryParse(b, out var date))
-                    {
-                        return date <= DateTime.Today; // 生日不能大於今天
-                    }
-                    return false; // parse 失敗也不通過
-                })
-                .WithMessage("生日格式錯誤或生日不能大於今天");
+                .Must(d => d <= DateTime.Today).WithMessage("生日不能大於今天");
         }
     }
 }
