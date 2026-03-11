@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using southernTravel.DTOs;
 using southernTravel.Model;
 using southernTravel.Services;
 using System.ComponentModel.DataAnnotations;
@@ -17,6 +18,24 @@ namespace southernTravel.Controllers
             _service = service;
             _validator = validator;
         }
+
+        // 取出所有會員
+        [HttpGet] // GET api/Member
+        public async Task<IActionResult> GetAllMembers()
+        {
+            try
+            {
+                var members = await _service.GetAllMembersAsync();
+
+                return Ok(members);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"查詢失敗：{ex.Message}");
+            }
+        }
+
+        // 取出單一會員
         [HttpGet("{id}")] // 這裡定義了路徑參數，例如：api/Member/5
         public async Task<IActionResult> GetById(int id)
         {
@@ -45,7 +64,7 @@ namespace southernTravel.Controllers
                 return StatusCode(500, $"查詢失敗：{ex.Message}");
             }
         }
-
+        // 註冊會員
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
@@ -94,6 +113,48 @@ namespace southernTravel.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"伺服器錯誤：{ex.Message}");
+            }
+        }
+
+        // 更新會員資料
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateMember(int id, [FromBody] UpdateMemberRequest request)
+        {
+            try
+            {
+                var result = await _service.UpdateMemberAsync(id, request);
+
+                if (!result)
+                {
+                    return NotFound($"找不到 ID 為 {id} 的會員");
+                }
+
+                return Ok(new { message = "會員資料更新成功" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"更新失敗：{ex.Message}");
+            }
+        }
+
+        // 刪除會員
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMember(int id)
+        {
+            try
+            {
+                var result = await _service.DeleteMemberAsync(id);
+
+                if (!result)
+                {
+                    return NotFound($"找不到 ID 為 {id} 的會員");
+                }
+
+                return Ok(new { message = "會員刪除成功" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"刪除失敗：{ex.Message}");
             }
         }
     }

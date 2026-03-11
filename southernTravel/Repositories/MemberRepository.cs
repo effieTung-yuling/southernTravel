@@ -39,5 +39,18 @@ namespace southernTravel.Repositories
             await _context.Members.AddAsync(member);
             await _context.SaveChangesAsync();
         }
+        // 更新會員資料
+        public async Task UpdateAsync(Member member)
+        {
+            _context.Members.Update(member);
+            await _context.SaveChangesAsync();
+        }
+
+        // 刪除會員
+        public async Task DeleteAsync(Member member)
+        {
+            _context.Members.Remove(member);
+            await _context.SaveChangesAsync();
+        }
     }
 }
