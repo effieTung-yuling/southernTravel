@@ -34,12 +34,13 @@ else
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseNpgsql(connectionString));
 }
-builder.Services.AddScoped<MembersRepositories>();
-builder.Services.AddScoped<MembersServices>();
+builder.Services.AddScoped<MemberRepository>();
+builder.Services.AddScoped<MemberService>();
 builder.Services.AddScoped<ProductsRepositories>();
 builder.Services.AddScoped<ProductsServices>();
 
-builder.Services.AddScoped<IMembersService, MembersServices>();
+builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+builder.Services.AddScoped<IMemberService, MemberService>();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.InvalidModelStateResponseFactory = context =>

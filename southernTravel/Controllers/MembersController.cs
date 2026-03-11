@@ -8,56 +8,88 @@ namespace southernTravel.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController : ControllerBase
+    public class MemberController : ControllerBase
     {
-        private readonly IMembersService _service;
+        private readonly IMemberService _service;
         private readonly IValidator<RegisterRequest> _validator;
-        public UserController(IMembersService service, IValidator<RegisterRequest> validator)
+        public MemberController(IMemberService service, IValidator<RegisterRequest> validator)
         {
             _service = service;
             _validator = validator;
+        }
+        [HttpGet("{id}")] // 這裡定義了路徑參數，例如：api/Member/5
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var member = await _service.GetMemberByIdAsync(id);
+
+                if (member == null)
+                {
+                    return NotFound($"找不到 ID 為 {id} 的會員");
+                }
+
+                // 安全提醒：回傳時建議不要包含 PasswordHash
+                return Ok(new
+                {
+                    member.Id,
+                    member.Name,
+                    member.Email,
+                    member.PhoneNumber,
+                    member.Birthday,
+                    member.CreatedAt
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"查詢失敗：{ex.Message}");
+            }
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            // 2. 基本 null 檢查
             if (request == null) return BadRequest("資料不能為空");
 
-            // 3. 格式校驗 (Email格式、電話、密碼大寫等)
             var validationResult = await _validator.ValidateAsync(request);
+
             if (!validationResult.IsValid)
             {
-                // 將 FluentValidation 的錯誤訊息轉成 API 格式回傳
                 return BadRequest(new
                 {
-                    errors = validationResult.Errors.Select(e => new { e.PropertyName, e.ErrorMessage })
+                    errors = validationResult.Errors.Select(e => new
+                    {
+                        e.PropertyName,
+                        e.ErrorMessage
+                    })
                 });
             }
 
             try
             {
-                // 4. 業務邏輯檢查 (Email 是否重複)
-                if (_service.IsEmailExists(request.Email))
-                {
-                    return BadRequest("該 Email 已經被註冊過了。");
-                }
-
-                // 5. 實體轉換與存檔
                 var newMember = new Member
                 {
                     Name = request.Name,
                     Email = request.Email,
-                    PasswordHash = request.Password, // 提醒：實務上建議使用 Hash 處理
+                    PasswordHash = request.Password,
                     PhoneNumber = request.PhoneNumber,
                     Birthday = request.Birthday.Value,
                     IsActive = true,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.UtcNow
                 };
 
-                _service.RegisterMember(newMember);
+                var result = await _service.RegisterMemberAsync(newMember);
 
-                return Ok(new { message = "註冊成功！", userId = newMember.Id });
+                if (!result)
+                {
+                    return BadRequest("該 Email 已經被註冊過了");
+                }
+
+                return Ok(new
+                {
+                    message = "註冊成功",
+                    userId = newMember.Id
+                });
             }
             catch (Exception ex)
             {

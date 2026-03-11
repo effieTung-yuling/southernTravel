@@ -8,7 +8,7 @@ namespace southernTravel.Model
     {
         [Column("id")]
         public int Id { get; set; }
-
+        // 這個欄位理論上不能是 null，但先讓編譯器不要警告
         [Column("name")]
         public string Name { get; set; } = null!;
 
@@ -34,8 +34,8 @@ namespace southernTravel.Model
         public bool IsActive { get; set; } = true;
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        // ?可以是 NULL
         [Column("updated_at")]
         public DateTime? UpdatedAt { get; set; }
     }
