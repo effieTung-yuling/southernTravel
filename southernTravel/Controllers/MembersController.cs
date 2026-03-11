@@ -86,13 +86,17 @@ namespace southernTravel.Controllers
 
             try
             {
+                if (!DateTime.TryParse(request.Birthday, out var birthday))
+                {
+                    return BadRequest("生日格式錯誤，請使用 YYYY-MM-DD");
+                }
                 var newMember = new Member
                 {
                     Name = request.Name,
                     Email = request.Email,
                     PasswordHash = request.Password,
                     PhoneNumber = request.PhoneNumber,
-                    Birthday = request.Birthday.Value,
+                    Birthday = birthday,
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow
                 };
