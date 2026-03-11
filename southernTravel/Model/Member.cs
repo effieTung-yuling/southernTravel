@@ -56,6 +56,6 @@ namespace southernTravel.Model
         public string PhoneNumber { get; set; } = null!;
 
         [Required]
-        public DateTime? Birthday { get; set; }
+        public string Birthday { get; set; } = null!;
     }
 }
