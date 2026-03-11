@@ -96,7 +96,7 @@ namespace southernTravel.Controllers
                     Email = request.Email,
                     PasswordHash = request.Password,
                     PhoneNumber = request.PhoneNumber,
-                    Birthday = birthday,
+                    Birthday = DateTime.SpecifyKind(birthday, DateTimeKind.Utc),
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow
                 };
