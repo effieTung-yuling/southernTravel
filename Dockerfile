@@ -2,7 +2,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /app
 COPY . .
-WORKDIR /app/cakeTodoList
+WORKDIR /app/southernTravel
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app/out
 
