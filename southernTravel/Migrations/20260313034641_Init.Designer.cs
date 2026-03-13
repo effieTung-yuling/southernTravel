@@ -11,14 +11,14 @@ using southernTravel.Data;
 namespace southernTravel.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260311154819_InitAttractions")]
-    partial class InitAttractions
+    [Migration("20260313034641_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.3");
 
             modelBuilder.Entity("southernTravel.Model.Attraction", b =>
                 {
@@ -122,32 +122,102 @@ namespace southernTravel.Migrations
                     b.ToTable("members");
                 });
 
-            modelBuilder.Entity("southernTravel.Model.Products", b =>
+            modelBuilder.Entity("southernTravel.Model.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("product_id");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("category");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("content");
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("creationDate");
+
+                    b.Property<int>("DayNum")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("day_num");
 
                     b.Property<string>("Description")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("description");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("endDate");
+
+                    b.Property<DateTime?>("GoEndDate")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("goEndDate");
+
+                    b.Property<DateTime?>("GoStartDate")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("goStartDate");
+
+                    b.Property<string>("ImageUrl1")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("imageUr1");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("is_enabled");
+
+                    b.Property<string>("ItineraryContent")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("itinerary_content");
+
+                    b.Property<string>("ItineraryDescription")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("itinerary_descripition");
+
+                    b.Property<int?>("MaxTravelers")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("max_travelers");
+
+                    b.Property<int>("Num")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("num");
+
+                    b.Property<decimal>("OriginPrice")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("origin_price");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("price");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("startDate");
+
+                    b.Property<string>("Tag1")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("tag_1");
+
+                    b.Property<string>("Tag2")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("tag_2");
+
+                    b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("title");
 
-                    b.Property<bool>("IsSale")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Unit")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("unit");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("REAL");
+                    b.HasKey("ProductId");
 
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Products");
+                    b.ToTable("products");
                 });
 #pragma warning restore 612, 618
         }

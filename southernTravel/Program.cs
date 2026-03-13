@@ -36,8 +36,9 @@ else
 }
 builder.Services.AddScoped<MemberRepository>();
 builder.Services.AddScoped<MemberService>();
-builder.Services.AddScoped<ProductsRepositories>();
-builder.Services.AddScoped<ProductsServices>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ProductService>();
 
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 builder.Services.AddScoped<IMemberService, MemberService>();
