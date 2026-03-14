@@ -74,5 +74,10 @@ namespace southernTravel.Model
 
         [Column("max_travelers")]
         public int? MaxTravelers { get; set; }
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        // ?可以是 NULL
+        [Column("updated_at")]
+        public DateTime? UpdatedAt { get; set; }
     }
 }
