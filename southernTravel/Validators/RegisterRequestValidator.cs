@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using southernTravel.Model;
+using southernTravel.DTOs;
 namespace southernTravel.Validators
 {
     public class RegisterRequestValidator : AbstractValidator<RegisterRequest>

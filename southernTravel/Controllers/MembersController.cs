@@ -9,11 +9,11 @@ namespace southernTravel.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MemberController : ControllerBase
+    public class MembersController : ControllerBase
     {
         private readonly IMemberService _service;
         private readonly IValidator<RegisterRequest> _validator;
-        public MemberController(IMemberService service, IValidator<RegisterRequest> validator)
+        public MembersController(IMemberService service, IValidator<RegisterRequest> validator)
         {
             _service = service;
             _validator = validator;
