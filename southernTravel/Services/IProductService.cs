@@ -1,9 +1,12 @@
-﻿using southernTravel.Model;
+﻿using southernTravel.DTOs;
+using southernTravel.Model;
 
 namespace southernTravel.Services
 {
     public interface IProductService
     {
-        Task<List<Product>> GetAllProductsAsync();
+        Task<List<ProductDto>> GetAllProductsAsync();
+
+        Task<ProductDto?> GetProductByIdAsync(int id);
     }
 }

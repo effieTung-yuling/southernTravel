@@ -1,5 +1,6 @@
 ﻿using southernTravel.Model;
 using southernTravel.Repositories;
+using southernTravel.DTOs;
 
 namespace southernTravel.Services
 {
@@ -13,11 +14,32 @@ namespace southernTravel.Services
         }
 
         // 取得所有商品
-        public async Task<List<Product>> GetAllProductsAsync()
+        public async Task<List<ProductDto>> GetAllProductsAsync()
         {
-            return await _productRepository.GetAllAsync();
+            var data = await _productRepository.GetAllProductsAsync();
+
+            return data.Select(x => new ProductDto
+            {
+                ProductId = x.ProductId,
+                Title = x.Title,
+                Category = x.Category,
+                Description = x.Description,
+            }).ToList();
         }
+        // 依據ID取得單一商品
+        public async Task<ProductDto?> GetProductByIdAsync(int id)
+        {
+            var x = await _productRepository.GetProductByIdAsync(id);
 
+            if (x == null) return null;
 
+            return new ProductDto
+            {
+                ProductId = x.ProductId,
+                Title = x.Title,
+                Category = x.Category,
+                Description = x.Description
+            };
+        }
     }
 }

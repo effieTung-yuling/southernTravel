@@ -2,6 +2,7 @@
 using southernTravel.Model;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace southernTravel.Repositories
 {
     public class ProductRepository:IProductRepository
@@ -12,9 +13,13 @@ namespace southernTravel.Repositories
             _context = context;
         }
 
-        public async Task<List<Product>> GetAllAsync()
+        public async Task<List<Product>> GetAllProductsAsync()
         {
             return await _context.Products.ToListAsync();
+        }
+        public async Task<Product?> GetProductByIdAsync(int id)
+        {
+            return await _context.Products.FindAsync(id);
         }
 
     }

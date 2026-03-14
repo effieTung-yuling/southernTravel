@@ -1,7 +1,8 @@
 ﻿using southernTravel.DTOs;
 using southernTravel.Model;
 using southernTravel.Repositories;
-
+namespace southernTravel.Services
+{
 public class AttractionService : IAttractionService
 {
     private readonly IAttractionRepository _repository;
@@ -10,7 +11,7 @@ public class AttractionService : IAttractionService
     {
         _repository = repository;
     }
-
+    // 取得所有景點
     public async Task<List<AttractionDto>> GetAllAsync()
     {
         var data = await _repository.GetAllAsync();
@@ -25,7 +26,7 @@ public class AttractionService : IAttractionService
             Location = x.Location
         }).ToList();
     }
-
+    // 取得單一景點
     public async Task<AttractionDto?> GetByIdAsync(int id)
     {
         var x = await _repository.GetByIdAsync(id);
@@ -97,4 +98,5 @@ public class AttractionService : IAttractionService
 
         return true;
     }
+}
 }

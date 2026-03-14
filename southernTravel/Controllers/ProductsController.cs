@@ -21,5 +21,14 @@ namespace southernTravel.Controllers
             var result = await _service.GetAllProductsAsync();
             return Ok(result);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var result = await _service.GetProductByIdAsync(id);
+            if (result == null)
+                return NotFound();
+            return Ok(result);
+        }
     }
 }
