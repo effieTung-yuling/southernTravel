@@ -57,19 +57,16 @@ namespace southernTravel.Model
         [Column("imageUr1")]
         public string? ImageUrl1 { get; set; }
 
-        [Column("creationDate")]
-        public DateTime? CreationDate { get; set; }
-
-        [Column("startDate")]
+        [Column("start_date")]
         public DateTime? StartDate { get; set; }
 
-        [Column("endDate")]
+        [Column("end_date")]
         public DateTime? EndDate { get; set; }
 
-        [Column("goStartDate")]
+        [Column("go_start_date")]
         public DateTime? GoStartDate { get; set; }
 
-        [Column("goEndDate")]
+        [Column("go_end_date")]
         public DateTime? GoEndDate { get; set; }
 
         [Column("max_travelers")]
