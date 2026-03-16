@@ -76,5 +76,8 @@ namespace southernTravel.Model
         // ?可以是 NULL
         [Column("updated_at")]
         public DateTime? UpdatedAt { get; set; }
+
+        // 一個商品 多張圖片
+        public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
     }
 }

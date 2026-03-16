@@ -1,6 +1,7 @@
-﻿using southernTravel.Model;
+﻿using Microsoft.AspNetCore.Mvc;
+using southernTravel.DTOs;
+using southernTravel.Model;
 using southernTravel.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace southernTravel.Controllers
 {
@@ -29,6 +30,37 @@ namespace southernTravel.Controllers
             if (result == null)
                 return NotFound();
             return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct(CreateProductDto dto)
+        {
+            var result = await _service.CreateProductAsync(dto);
+
+            return Ok(result);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateProduct(int id, UpdateProductDto dto)
+        {
+            var success = await _service.UpdateProductAsync(id, dto);
+
+            if (!success)
+                return NotFound();
+
+            return Ok();
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            var success = await _service.DeleteProductAsync(id);
+
+            if (!success)
+                return NotFound();
+
+            return Ok();
         }
     }
 }

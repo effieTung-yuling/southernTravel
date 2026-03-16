@@ -32,7 +32,9 @@
         public string Category { get; set; } = string.Empty;
         public string? Tag1 { get; set; }
         public string? Tag2 { get; set; }
+        public decimal Price { get; set; }
         public int DayNum { get; set; }
+        public string? ImageUrl1 { get; set; }
         public string? Description { get; set; }
         public string? Content { get; set; }
         public bool IsEnabled { get; set; }
