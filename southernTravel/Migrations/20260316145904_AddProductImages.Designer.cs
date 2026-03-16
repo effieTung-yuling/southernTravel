@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using southernTravel.Data;
 
@@ -10,9 +11,11 @@ using southernTravel.Data;
 namespace southernTravel.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260316145904_AddProductImages")]
+    partial class AddProductImages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
@@ -236,10 +239,6 @@ namespace southernTravel.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("product_id");
-
-                    b.Property<int>("SortOrder")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("sort_order");
 
                     b.HasKey("ImageId");
 

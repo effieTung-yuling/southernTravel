@@ -1,4 +1,6 @@
-﻿namespace southernTravel.DTOs
+﻿using southernTravel.Model;
+
+namespace southernTravel.DTOs
 {
     public class CreateProductDto
     {
@@ -25,6 +27,8 @@
         public string? ImageUrl1 { get; set; }
 
         public int? MaxTravelers { get; set; }
+        // 一個商品 多張圖片
+        public List<CreateProductImageDto> Images { get; set; } = new();
     }
     public class UpdateProductDto
     {
@@ -38,7 +42,8 @@
         public string? Description { get; set; }
         public string? Content { get; set; }
         public bool IsEnabled { get; set; }
-
+        // 一個商品 多張圖片
+        public List<ProductImageDto> Images { get; set; } = new();
 
     }
 
@@ -65,5 +70,7 @@
         public string? ImageUrl1 { get; set; }
 
         public bool IsEnabled { get; set; }
+        // 多張圖片
+        public List<ProductImageDto> Images { get; set; } = new();
     }
 }

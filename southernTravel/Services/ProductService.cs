@@ -24,6 +24,15 @@ namespace southernTravel.Services
                 Title = x.Title,
                 Category = x.Category,
                 Description = x.Description,
+                // 將圖片映射到 DTO，並依 SortOrder 排序
+                Images = x.Images
+                    .OrderBy(i => i.SortOrder) // 如果資料庫已有 sortOrder 就用這個
+                    .Select(i => new ProductImageDto
+                    {
+                        ImageId = i.ImageId,
+                        ImageUrl = i.ImageUrl
+                    })
+                    .ToList()
             }).ToList();
         }
         // 依據ID取得單一商品
@@ -38,7 +47,16 @@ namespace southernTravel.Services
                 ProductId = x.ProductId,
                 Title = x.Title,
                 Category = x.Category,
-                Description = x.Description
+                Description = x.Description,
+                // 將圖片映射到 DTO，並依 SortOrder 排序
+                Images = x.Images
+                    .OrderBy(i => i.SortOrder) // 如果資料庫已有 sortOrder 就用這個
+                    .Select(i => new ProductImageDto
+                    {
+                        ImageId = i.ImageId,
+                        ImageUrl = i.ImageUrl
+                    })
+                    .ToList()
             };
         }
 
@@ -58,7 +76,12 @@ namespace southernTravel.Services
                 Num = dto.Num,
                 ImageUrl1 = dto.ImageUrl1,
                 MaxTravelers = dto.MaxTravelers,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                Images = dto.Images.Select((img, index) => new ProductImage
+                {
+                    ImageUrl = img.ImageUrl,
+                    SortOrder = index + 1 // ⭐ 每個 product 從 1 開始排序
+                }).ToList()
             };
 
             var result = await _productRepository.CreateProductAsync(product);
@@ -75,7 +98,12 @@ namespace southernTravel.Services
                 Content = result.Content,
                 Price = result.Price,
                 ImageUrl1 = result.ImageUrl1,
-                IsEnabled = result.IsEnabled
+                IsEnabled = result.IsEnabled,
+                Images = result.Images.Select(img => new ProductImageDto
+                {
+                    ImageId = img.ImageId,
+                    ImageUrl = img.ImageUrl
+                }).ToList()
             };
         }
 
@@ -87,7 +115,6 @@ namespace southernTravel.Services
 
             productList.Title = dto.Title;
             productList.Category = dto.Category;
-            productList.Description = dto.Description;
             productList.Tag1 = dto.Tag1;
             productList.Tag2 = dto.Tag2;
             productList.DayNum = dto.DayNum;
@@ -97,6 +124,15 @@ namespace southernTravel.Services
             productList.ImageUrl1 = dto.ImageUrl1;
             productList.IsEnabled = dto.IsEnabled;
             productList.UpdatedAt = DateTime.UtcNow;
+            // 清空舊圖片
+            productList.Images.Clear();
+
+            // 新增新圖片，順序從 1 開始
+            productList.Images = dto.Images.Select((img, index) => new ProductImage
+            {
+                ImageUrl = img.ImageUrl,
+                SortOrder = index + 1
+            }).ToList();
 
             await _productRepository.UpdateProductAsync(productList);
 

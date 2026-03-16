@@ -15,11 +15,15 @@ namespace southernTravel.Repositories
 
         public async Task<List<Product>> GetAllProductsAsync()
         {
-            return await _context.Products.ToListAsync();
+            return await _context.Products
+                    .Include(p => p.Images)
+                    .ToListAsync();
         }
         public async Task<Product?> GetProductByIdAsync(int id)
         {
-            return await _context.Products.FindAsync(id);
+            return await _context.Products
+                    .Include(p => p.Images)
+                    .FirstOrDefaultAsync(p => p.ProductId == id);
         }
 
         public async Task<Product> CreateProductAsync(Product product)

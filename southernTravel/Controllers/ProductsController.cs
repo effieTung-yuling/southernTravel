@@ -48,7 +48,7 @@ namespace southernTravel.Controllers
             if (!success)
                 return NotFound();
 
-            return Ok();
+            return Ok(success);
         }
 
 
@@ -60,7 +60,7 @@ namespace southernTravel.Controllers
             if (!success)
                 return NotFound();
 
-            return Ok();
+            return Ok(success);
         }
     }
 }

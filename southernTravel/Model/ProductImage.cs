@@ -17,7 +17,8 @@ namespace southernTravel.Model
         [Column("image_url")]
         public string ImageUrl { get; set; } = string.Empty;
 
-
+        [Column("sort_order")]
+        public int SortOrder { get; set; }
         // Navigation Property
         [ForeignKey("ProductId")]
         public Product Product { get; set; } = null!;
