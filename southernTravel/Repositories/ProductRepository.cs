@@ -17,12 +17,14 @@ namespace southernTravel.Repositories
         {
             return await _context.Products
                     .Include(p => p.Images)
+                    .Include(p => p.Itineraries)
                     .ToListAsync();
         }
         public async Task<Product?> GetProductByIdAsync(int id)
         {
             return await _context.Products
                     .Include(p => p.Images)
+                    .Include(p => p.Itineraries)
                     .FirstOrDefaultAsync(p => p.ProductId == id);
         }
 
@@ -35,7 +37,7 @@ namespace southernTravel.Repositories
 
         public async Task UpdateProductAsync(Product product)
         {
-            _context.Products.Update(product);
+            //_context.Products.Update(product);
             await _context.SaveChangesAsync();
         }
 

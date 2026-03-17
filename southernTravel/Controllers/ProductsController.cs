@@ -48,7 +48,7 @@ namespace southernTravel.Controllers
             if (!success)
                 return NotFound();
 
-            return Ok(success);
+            return Ok("更新成功");
         }
 
 

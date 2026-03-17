@@ -30,9 +30,17 @@ namespace southernTravel.Services
                     .Select(i => new ProductImageDto
                     {
                         ImageId = i.ImageId,
-                        ImageUrl = i.ImageUrl
+                        ImageUrl = i.ImageUrl,
+                        SortOrder = i.SortOrder
                     })
-                    .ToList()
+                    .ToList(),
+                    Itineraries = x.Itineraries.Select(i => new ItineraryDto
+                    {
+                        DayNumber = i.DayNumber,
+                        TimePeriod = i.TimePeriod,
+                        Title = i.Title,
+                        Content = i.Content
+                    }).ToList()
             }).ToList();
         }
         // 依據ID取得單一商品
@@ -54,9 +62,17 @@ namespace southernTravel.Services
                     .Select(i => new ProductImageDto
                     {
                         ImageId = i.ImageId,
-                        ImageUrl = i.ImageUrl
+                        ImageUrl = i.ImageUrl,
+                        SortOrder = i.SortOrder
                     })
-                    .ToList()
+                    .ToList(),
+                Itineraries = x.Itineraries.Select(i => new ItineraryDto
+                {
+                    DayNumber = i.DayNumber,
+                    TimePeriod = i.TimePeriod,
+                    Title = i.Title,
+                    Content = i.Content
+                }).ToList()
             };
         }
 
@@ -81,8 +97,15 @@ namespace southernTravel.Services
                 {
                     ImageUrl = img.ImageUrl,
                     SortOrder = index + 1 // ⭐ 每個 product 從 1 開始排序
-                }).ToList()
-            };
+                }).ToList(),
+                Itineraries = dto.Itineraries.Select(i => new Itinerary
+                {
+                    DayNumber = i.DayNumber,
+                    TimePeriod = i.TimePeriod,
+                    Title = i.Title,
+                    Content = i.Content
+                    }).ToList()
+                };
 
             var result = await _productRepository.CreateProductAsync(product);
 
@@ -99,10 +122,21 @@ namespace southernTravel.Services
                 Price = result.Price,
                 ImageUrl1 = result.ImageUrl1,
                 IsEnabled = result.IsEnabled,
+
                 Images = result.Images.Select(img => new ProductImageDto
                 {
                     ImageId = img.ImageId,
-                    ImageUrl = img.ImageUrl
+                    ImageUrl = img.ImageUrl,
+                    SortOrder = img.SortOrder
+                }).ToList(),
+
+                // 🔥 改這裡
+                Itineraries = result.Itineraries.Select(i => new ItineraryDto
+                {
+                    DayNumber = i.DayNumber,
+                    TimePeriod = i.TimePeriod,
+                    Title = i.Title,
+                    Content = i.Content
                 }).ToList()
             };
         }
@@ -111,7 +145,8 @@ namespace southernTravel.Services
         {
             var productList = await _productRepository.GetProductByIdAsync(id);
 
-            if (productList == null) return false;
+            if (productList == null) throw new Exception("Product not found");
+
 
             productList.Title = dto.Title;
             productList.Category = dto.Category;
@@ -124,15 +159,43 @@ namespace southernTravel.Services
             productList.ImageUrl1 = dto.ImageUrl1;
             productList.IsEnabled = dto.IsEnabled;
             productList.UpdatedAt = DateTime.UtcNow;
-            // 清空舊圖片
-            productList.Images.Clear();
-
-            // 新增新圖片，順序從 1 開始
-            productList.Images = dto.Images.Select((img, index) => new ProductImage
+            // ✅ ⭐重點：圖片「累加」不是覆蓋
+            if (dto.Images != null && dto.Images.Any())
             {
-                ImageUrl = img.ImageUrl,
-                SortOrder = index + 1
-            }).ToList();
+                var maxOrder = productList.Images.Any()
+                    ? productList.Images.Max(i => i.SortOrder)
+                    : 0;
+
+                var newImages = dto.Images.Select((img, index) => new ProductImage
+                {
+                    ImageUrl = img.ImageUrl,
+                    SortOrder = maxOrder + index + 1,
+                    ProductId = productList.ProductId
+                }).ToList();
+
+                foreach (var img in newImages)
+                {
+                    productList.Images.Add(img);
+                }
+            }
+            if(dto.Itineraries != null && dto.Itineraries.Any())
+            {
+                var maxDayNum = productList.Itineraries.Any()
+                    ? productList.Itineraries.Max(i => i.DayNumber)
+                    : 0;
+                var newItineraries = dto.Itineraries.Select(i => new Itinerary
+                {
+                    DayNumber = i.DayNumber,
+                    TimePeriod = i.TimePeriod,
+                    Title = i.Title,
+                    Content = i.Content,
+                    ProductId = productList.ProductId
+                }).ToList();
+                foreach (var it in newItineraries)
+                {
+                    productList.Itineraries.Add(it);
+                }
+            }
 
             await _productRepository.UpdateProductAsync(productList);
 
