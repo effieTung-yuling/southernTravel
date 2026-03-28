@@ -24,6 +24,7 @@ namespace southernTravel.Services
                 Title = x.Title,
                 Category = x.Category,
                 Description = x.Description,
+                Price = x.Price,
                 // 將圖片映射到 DTO，並依 SortOrder 排序
                 Images = x.Images
                     .OrderBy(i => i.SortOrder) // 如果資料庫已有 sortOrder 就用這個
@@ -56,6 +57,7 @@ namespace southernTravel.Services
                 Title = x.Title,
                 Category = x.Category,
                 Description = x.Description,
+                Price = x.Price,
                 // 將圖片映射到 DTO，並依 SortOrder 排序
                 Images = x.Images
                     .OrderBy(i => i.SortOrder) // 如果資料庫已有 sortOrder 就用這個
