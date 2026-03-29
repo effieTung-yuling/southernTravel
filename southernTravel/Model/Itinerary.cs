@@ -1,5 +1,8 @@
-﻿namespace southernTravel.Model
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace southernTravel.Model
 {
+    [Table("itineraries")]
     public class Itinerary
     {
         public int ItineraryId { get; set; }
