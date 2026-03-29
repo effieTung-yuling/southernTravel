@@ -8,5 +8,11 @@
         public DbSet<Product> Products { get; set; }
         public DbSet<Member> Members { get; set; }
         public DbSet<Attraction> Attractions { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+
+        public DbSet<Itinerary> Itineraries { get; set; }
+
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
     }
 }

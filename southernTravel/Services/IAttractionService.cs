@@ -1,14 +1,16 @@
 ﻿using southernTravel.DTOs;
-
-public interface IAttractionService
+namespace southernTravel.Services
 {
-    Task<List<AttractionDto>> GetAllAsync();
+    public interface IAttractionService
+    {
+        Task<List<AttractionDto>> GetAllAsync();
 
-    Task<AttractionDto?> GetByIdAsync(int id);
+        Task<AttractionDto?> GetByIdAsync(int id);
+        // 新增景點，傳入 CreateAttractionDto，回傳新增後的 AttractionDto
+        Task<AttractionDto> CreateAsync(CreateAttractionDto dto);
 
-    Task<AttractionDto> CreateAsync(CreateAttractionDto dto);
+        Task<bool> UpdateAsync(int id, UpdatedAttractionDto dto);
 
-    Task<bool> UpdateAsync(int id, UpdatedAttractionDto dto);
-
-    Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteAsync(int id);
+    }
 }
