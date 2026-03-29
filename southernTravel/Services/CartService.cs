@@ -42,7 +42,7 @@ namespace southernTravel.Services
             };
         }
 
-        public async Task<CartItem?> AddItemAsync(int memberId, CreateCartItemDto dto)
+        public async Task<CartItemDto> AddItemAsync(int memberId, CreateCartItemDto dto)
         {
             // 1. 找商品
             var product = await _productRepository.GetProductByIdAsync(dto.ProductId);
@@ -81,10 +81,17 @@ namespace southernTravel.Services
 
             await _context.SaveChangesAsync();
 
-            return item;
+            return new CartItemDto
+            {
+                ProductId = item.ProductId,
+                ProductName = product.Title,
+                Qty = item.Qty,
+                Price = item.Price,
+                Total = item.Total
+            };
         }
 
-        public async Task<CartItem?> UpdateItemAsync(int cartItemId, UpdateCartItemDto dto)
+        public async Task<CartItemDto> UpdateItemAsync(int cartItemId, UpdateCartItemDto dto)
         {
             var item = await _repo.GetCartItemWithCartAsync(cartItemId);
             if (item == null) throw new Exception("CartItem not found");
@@ -105,7 +112,14 @@ namespace southernTravel.Services
                 .SumAsync(ci => ci.Total);
             await _context.SaveChangesAsync();
 
-            return item;
+            return new CartItemDto
+            {
+                ProductId = item.ProductId,
+                ProductName = item.Product?.Title,
+                Qty = item.Qty,
+                Price = item.Price,
+                Total = item.Total
+            };
         }
 
         public async Task DeleteItemAsync(int cartItemId)

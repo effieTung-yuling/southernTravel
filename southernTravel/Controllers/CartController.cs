@@ -25,14 +25,14 @@ namespace southernTravel.Controllers
         public async Task<IActionResult> AddItem(int memberId, [FromBody] CreateCartItemDto dto)
         {
             var item = await _service.AddItemAsync(memberId, dto);
-            return Ok(item);
+            return Ok(dto);
         }
 
         [HttpPut("items/{itemId}")]
         public async Task<IActionResult> UpdateItem(int itemId, [FromBody] UpdateCartItemDto dto)
         {
             var item = await _service.UpdateItemAsync(itemId, dto);
-            return Ok(item);
+            return Ok(dto);
         }
 
         [HttpDelete("items/{itemId}")]
