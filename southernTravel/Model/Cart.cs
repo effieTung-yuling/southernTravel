@@ -1,5 +1,8 @@
-﻿namespace southernTravel.Model
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace southernTravel.Model
 {
+    [Table("carts")]
     public class Cart
     {
         public int Id { get; set; }
