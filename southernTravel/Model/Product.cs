@@ -36,7 +36,7 @@ namespace southernTravel.Model
         [Column("itinerary_content")]
         public string? ItineraryContent { get; set; }
 
-        [Column("itinerary_descripition")]
+        [Column("itinerary_description")]
         public string? ItineraryDescription { get; set; }
 
         [Column("origin_price")]
