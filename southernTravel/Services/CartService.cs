@@ -19,22 +19,30 @@ namespace southernTravel.Services
             _context = context;
         }
 
-        public async Task<CartDto?> GetCartAsync(int memberId)
+        public async Task<CartDto> GetCartAsync(int memberId)
         {
             var cart = await _repo.GetCartByMemberIdAsync(memberId);
 
-            if (cart == null) return null;
+            // 如果找不到，直接回傳一個初始化的空 DTO，而不是 null
+            if (cart == null)
+            {
+                return new CartDto
+                {
+                    MemberId = memberId,
+                    Items = new List<CartItemDto>(),
+                    FinalTotal = 0
+                };
+            }
 
             return new CartDto
             {
                 Id = cart.Id,
                 MemberId = cart.MemberId,
                 FinalTotal = cart.FinalTotal,
-
                 Items = cart.CartItems.Select(ci => new CartItemDto
                 {
                     ProductId = ci.ProductId,
-                    ProductName = ci.Product?.Title, // ⭐ 記得 Include Product
+                    ProductName = ci.Product?.Title,
                     Qty = ci.Qty,
                     Price = ci.Price,
                     Total = ci.Total

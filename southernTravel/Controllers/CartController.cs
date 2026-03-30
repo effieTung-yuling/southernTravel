@@ -18,6 +18,16 @@ namespace southernTravel.Controllers
         public async Task<IActionResult> GetCart(int memberId)
         {
             var cart = await _service.GetCartAsync(memberId);
+            if (cart == null)
+            {
+                // 這裡就是改掉 204 的地方，改回傳 404 並自訂訊息
+                return NotFound(new
+                {
+                    status = 404,
+                    message = $"查詢失敗：編號 {memberId} 的會員目前沒有購物車資料。"
+                });
+            }
+
             return Ok(cart);
         }
 
