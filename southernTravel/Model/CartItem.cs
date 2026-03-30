@@ -2,17 +2,29 @@
 
 namespace southernTravel.Model
 {
-    [Table("cart_Items")]
+    [Table("cart_items")]
     public class CartItem
     {
+        [Column("id")]
         public int Id { get; set; }
+
+        [Column("cart_id")]
         public int CartId { get; set; }
+
+        [Column("product_id")]
         public int ProductId { get; set; }
+
+        [Column("qty")]
         public int Qty { get; set; }
+
+        [Column("price")]
         public decimal Price { get; set; }
+
+        [Column("total")]
         public decimal Total { get; set; }
 
-        public Cart? Cart { get; set; } // 假設已存在 Cart model
-        public Product? Product { get; set; } // 假設已存在 Product model
+        // 🔥 關聯
+        public Cart? Cart { get; set; }
+        public Product? Product { get; set; }
     }
 }
