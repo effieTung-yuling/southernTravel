@@ -52,5 +52,10 @@ namespace southernTravel.Repositories
             _context.Members.Remove(member);
             await _context.SaveChangesAsync();
         }
+        // 根據 Email 取得會員
+        public async Task<Member?> GetByEmailAsync(string email)
+        {
+            return await _context.Members.FirstOrDefaultAsync(m => m.Email == email);
+        }
     }
 }

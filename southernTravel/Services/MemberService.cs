@@ -73,5 +73,22 @@ namespace southernTravel.Services
 
             return true;
         }
+
+        // 根據 Email 取得會員
+        // 登入會員
+        public async Task<Member?> LoginAsync(string email, string password)
+        {
+            // 1. 先用 Email 找人
+            var member = await _memberRepository.GetByEmailAsync(email);
+
+            // 2. 如果找不到人，或者密碼不對（暫時用明文比對）
+            if (member == null || member.PasswordHash != password)
+            {
+                return null;
+            }
+
+            // 3. 驗證成功，回傳會員資料
+            return member;
+        }
     }
 }
