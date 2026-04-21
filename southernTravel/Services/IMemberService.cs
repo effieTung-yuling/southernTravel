@@ -15,5 +15,7 @@ namespace southernTravel.Services
         Task<bool> UpdateMemberAsync(int id, UpdateMemberRequest request);
         // 刪除會員
         Task<bool> DeleteMemberAsync(int id);
+        // 根據 Email 取得會員
+        Task<Member?> LoginAsync(string email, string password);
     }
 }

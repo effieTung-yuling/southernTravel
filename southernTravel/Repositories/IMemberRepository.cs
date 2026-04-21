@@ -16,5 +16,7 @@ namespace southernTravel.Repositories
         Task UpdateAsync(Member member);
         // 刪除會員
         Task DeleteAsync(Member member);
+        // 根據 Email 取得會員
+        Task<Member?> GetByEmailAsync(string email);
     }
 }
