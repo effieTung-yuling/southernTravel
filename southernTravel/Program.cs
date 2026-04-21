@@ -80,7 +80,7 @@ app.UseCors("AllowAll");
 // --- 順序 2：API 文件 ---
 app.MapOpenApi();
 app.MapScalarApiReference(options => {
-    options.WithTitle("我的 API 文件")
+    options.WithTitle("southernTravel")
            .WithTheme(ScalarTheme.Moon);
 });
 
