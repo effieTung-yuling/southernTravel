@@ -161,5 +161,29 @@ namespace southernTravel.Controllers
                 return StatusCode(500, $"刪除失敗：{ex.Message}");
             }
         }
+
+        // 根據 Email 取得會員
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
+        {
+            var member = await _service.LoginAsync(request.Email, request.Password);
+
+            if (member == null)
+            {
+                return BadRequest(new { message = "帳號或密碼錯誤" });
+            }
+
+            // 登入成功，回傳你想讓前端存入 Pinia 的資訊
+            return Ok(new
+            {
+                message = "登入成功",
+                user = new
+                {
+                    member.Id,
+                    member.Name,
+                    member.Email
+                }
+            });
+        }
     }
 }
