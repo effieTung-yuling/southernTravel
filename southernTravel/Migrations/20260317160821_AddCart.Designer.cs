@@ -245,7 +245,7 @@ namespace southernTravel.Migrations
 
                     b.Property<string>("imageUrl")
                         .HasColumnType("TEXT")
-                        .HasColumnName("image_ur1");
+                        .HasColumnName("image_url");
 
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("INTEGER")

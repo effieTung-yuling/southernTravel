@@ -19,7 +19,7 @@ namespace southernTravel.Migrations
             migrationBuilder.RenameColumn(
                 name: "imageUr1",
                 table: "products",
-                newName: "image_ur1");
+                newName: "image_url");
 
             migrationBuilder.RenameColumn(
                 name: "goStartDate",
@@ -62,7 +62,7 @@ namespace southernTravel.Migrations
                 newName: "startDate");
 
             migrationBuilder.RenameColumn(
-                name: "image_ur1",
+                name: "image_url",
                 table: "products",
                 newName: "imageUr1");
 
