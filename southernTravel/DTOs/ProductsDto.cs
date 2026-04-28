@@ -24,7 +24,7 @@ namespace southernTravel.DTOs
 
         public int Num { get; set; }
 
-        public string? ImageUrl { get; set; }
+        public string? MainImageUrl { get; set; }
 
         public int? MaxTravelers { get; set; }
         public List<ItineraryDto> Itineraries { get; set; } = new();
@@ -39,7 +39,7 @@ namespace southernTravel.DTOs
         public string? Tag2 { get; set; }
         public decimal Price { get; set; }
         public int DayNum { get; set; }
-        public string? ImageUrl { get; set; }
+        public string? MainImageUrl { get; set; }
         public string? Description { get; set; }
         public string? Content { get; set; }
         public bool IsEnabled { get; set; }
@@ -70,7 +70,7 @@ namespace southernTravel.DTOs
 
         public decimal Price { get; set; }
 
-        public string? ImageUrl { get; set; }
+        public string? MainImageUrl { get; set; }
 
         public bool IsEnabled { get; set; }
         // 行程的內容
