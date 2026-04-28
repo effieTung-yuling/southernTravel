@@ -162,7 +162,7 @@ namespace southernTravel.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("goStartDate");
 
-                    b.Property<string>("ImageUrl1")
+                    b.Property<string>("imageUrl")
                         .HasColumnType("TEXT")
                         .HasColumnName("imageUr1");
 

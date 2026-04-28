@@ -55,7 +55,7 @@ namespace southernTravel.Model
         public bool IsEnabled { get; set; }
 
         [Column("image_ur1")]
-        public string? ImageUrl1 { get; set; }
+        public string? ImageUrl { get; set; }
 
         [Column("start_date")]
         public DateTime? StartDate { get; set; }

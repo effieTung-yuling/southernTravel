@@ -92,7 +92,7 @@ namespace southernTravel.Services
                 OriginPrice = dto.OriginPrice,
                 Price = dto.Price,
                 Num = dto.Num,
-                ImageUrl1 = dto.ImageUrl1,
+                ImageUrl = dto.ImageUrl,
                 MaxTravelers = dto.MaxTravelers,
                 CreatedAt = DateTime.UtcNow,
                 Images = dto.Images.Select((img, index) => new ProductImage
@@ -122,7 +122,7 @@ namespace southernTravel.Services
                 Description = result.Description,
                 Content = result.Content,
                 Price = result.Price,
-                ImageUrl1 = result.ImageUrl1,
+                ImageUrl = result.ImageUrl,
                 IsEnabled = result.IsEnabled,
 
                 Images = result.Images.Select(img => new ProductImageDto
@@ -158,7 +158,7 @@ namespace southernTravel.Services
             productList.Description = dto.Description;
             productList.Content = dto.Content;
             productList.Price = dto.Price;
-            productList.ImageUrl1 = dto.ImageUrl1;
+            productList.ImageUrl = dto.ImageUrl;
             productList.IsEnabled = dto.IsEnabled;
             productList.UpdatedAt = DateTime.UtcNow;
             // ✅ ⭐重點：圖片「累加」不是覆蓋
