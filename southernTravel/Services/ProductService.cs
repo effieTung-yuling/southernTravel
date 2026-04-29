@@ -25,9 +25,11 @@ namespace southernTravel.Services
                 Category = x.Category,
                 Description = x.Description,
                 Price = x.Price,
+                // *** 修正：補上 MainImageUrl 的映射 ***
+                MainImageUrl = x.MainImageUrl, 
                 // 將圖片映射到 DTO，並依 SortOrder 排序
                 Images = x.Images
-                    .OrderBy(i => i.SortOrder) // 如果資料庫已有 sortOrder 就用這個
+                    .OrderBy(i => i.SortOrder)
                     .Select(i => new ProductImageDto
                     {
                         ImageId = i.ImageId,
@@ -35,13 +37,13 @@ namespace southernTravel.Services
                         SortOrder = i.SortOrder
                     })
                     .ToList(),
-                    Itineraries = x.Itineraries.Select(i => new ItineraryDto
-                    {
-                        DayNumber = i.DayNumber,
-                        TimePeriod = i.TimePeriod,
-                        Title = i.Title,
-                        Content = i.Content
-                    }).ToList()
+                Itineraries = x.Itineraries.Select(i => new ItineraryDto
+                {
+                    DayNumber = i.DayNumber,
+                    TimePeriod = i.TimePeriod,
+                    Title = i.Title,
+                    Content = i.Content
+                }).ToList()
             }).ToList();
         }
         // 依據ID取得單一商品
@@ -58,9 +60,10 @@ namespace southernTravel.Services
                 Category = x.Category,
                 Description = x.Description,
                 Price = x.Price,
-                // 將圖片映射到 DTO，並依 SortOrder 排序
+                // *** 修正：補上 MainImageUrl 的映射 ***
+                MainImageUrl = x.MainImageUrl,
                 Images = x.Images
-                    .OrderBy(i => i.SortOrder) // 如果資料庫已有 sortOrder 就用這個
+                    .OrderBy(i => i.SortOrder)
                     .Select(i => new ProductImageDto
                     {
                         ImageId = i.ImageId,
