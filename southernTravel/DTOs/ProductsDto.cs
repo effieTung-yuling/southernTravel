@@ -16,20 +16,24 @@ namespace southernTravel.DTOs
 
         public string? Description { get; set; }
 
-        public string? Content { get; set; }
-
         public decimal OriginPrice { get; set; }
 
         public decimal Price { get; set; }
 
         public int Num { get; set; }
 
-        public string? ImageUrl1 { get; set; }
+        public string? MainImageUrl { get; set; }
+        public DateTime? StartDate { get; set; }
 
+        public DateTime? EndDate { get; set; }
+        public DateTime? GoStartDate { get; set; }
+        public DateTime? GoEndDate { get; set; }
         public int? MaxTravelers { get; set; }
         public List<ItineraryDto> Itineraries { get; set; } = new();
         // 一個商品 多張圖片
         public List<CreateProductImageDto> Images { get; set; } = new();
+
+        public List<ProductAttractionRef> AttractionRefs { get; set; } = new();
     }
     public class UpdateProductDto
     {
@@ -39,14 +43,21 @@ namespace southernTravel.DTOs
         public string? Tag2 { get; set; }
         public decimal Price { get; set; }
         public int DayNum { get; set; }
-        public string? ImageUrl1 { get; set; }
+        public string? MainImageUrl { get; set; }
         public string? Description { get; set; }
         public string? Content { get; set; }
         public bool IsEnabled { get; set; }
+        public DateTime? StartDate { get; set; }
+
+        public DateTime? EndDate { get; set; }
+        public DateTime? GoStartDate { get; set; }
+        public DateTime? GoEndDate { get; set; }
+        public int? MaxTravelers { get; set; }
         // 更新行程的內容
         public List<ItineraryDto> Itineraries { get; set; }
         // 一個商品 多張圖片
         public List<UpdateProductImageDto>? Images { get; set; }
+        public List<ProductAttractionRef>? AttractionRefs { get; set; }
 
     }
 
@@ -70,12 +81,14 @@ namespace southernTravel.DTOs
 
         public decimal Price { get; set; }
 
-        public string? ImageUrl1 { get; set; }
+        public string? MainImageUrl { get; set; }
 
         public bool IsEnabled { get; set; }
         // 行程的內容
         public List<ItineraryDto> Itineraries { get; set; } = new();
         // 多張圖片
         public List<ProductImageDto> Images { get; set; } = null!;
+        public List<ProductAttractionRef> ProductAttractionRef { get; set; } = new();
+
     }
 }

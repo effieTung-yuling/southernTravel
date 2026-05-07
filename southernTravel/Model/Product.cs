@@ -11,6 +11,7 @@ namespace southernTravel.Model
         public int ProductId { get; set; }
 
         [Required]
+        [MaxLength(200)] // 建議加上長度限制
         [Column("title")]
         public string Title { get; set; } = string.Empty;
 
@@ -30,19 +31,10 @@ namespace southernTravel.Model
         [Column("description")]
         public string? Description { get; set; }
 
-        [Column("content")]
-        public string? Content { get; set; }
-
-        [Column("itinerary_content")]
-        public string? ItineraryContent { get; set; }
-
-        [Column("itinerary_description")]
-        public string? ItineraryDescription { get; set; }
-
-        [Column("origin_price")]
+        [Column("origin_price", TypeName = "decimal(18,2)")]
         public decimal OriginPrice { get; set; }
 
-        [Column("price")]
+        [Column("price", TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
         [Column("unit")]
@@ -54,9 +46,10 @@ namespace southernTravel.Model
         [Column("is_enabled")]
         public bool IsEnabled { get; set; }
 
-        [Column("image_ur1")]
-        public string? ImageUrl1 { get; set; }
+        [Column("main_image_url")]
+        public string? MainImageUrl { get; set; }
 
+        // 以下時間欄位使用 Nullable 是合理的，除非你強制每個產品都要有日期
         [Column("start_date")]
         public DateTime? StartDate { get; set; }
 
@@ -71,14 +64,16 @@ namespace southernTravel.Model
 
         [Column("max_travelers")]
         public int? MaxTravelers { get; set; }
+
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        // ?可以是 NULL
+
         [Column("updated_at")]
         public DateTime? UpdatedAt { get; set; }
-        // 🔥 一對多（行程）
-        public List<Itinerary> Itineraries { get; set; } = new();
-        // 一個商品 多張圖片
-        public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
+
+        // 關聯部分
+        public virtual ICollection<Itinerary> Itineraries { get; set; } = new List<Itinerary>();
+        public virtual ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
+        public virtual ICollection<ProductAttractionRef> AttractionRefs { get; set; } = new List<ProductAttractionRef>();
     }
 }

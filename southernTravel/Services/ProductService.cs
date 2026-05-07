@@ -25,23 +25,28 @@ namespace southernTravel.Services
                 Category = x.Category,
                 Description = x.Description,
                 Price = x.Price,
-                // 將圖片映射到 DTO，並依 SortOrder 排序
+                MainImageUrl = x.MainImageUrl,
                 Images = x.Images
-                    .OrderBy(i => i.SortOrder) // 如果資料庫已有 sortOrder 就用這個
+                    .OrderBy(i => i.SortOrder)
                     .Select(i => new ProductImageDto
                     {
                         ImageId = i.ImageId,
                         ImageUrl = i.ImageUrl,
                         SortOrder = i.SortOrder
-                    })
-                    .ToList(),
-                    Itineraries = x.Itineraries.Select(i => new ItineraryDto
-                    {
-                        DayNumber = i.DayNumber,
-                        TimePeriod = i.TimePeriod,
-                        Title = i.Title,
-                        Content = i.Content
-                    }).ToList()
+                    }).ToList(),
+                Itineraries = x.Itineraries.Select(i => new ItineraryDto
+                {
+                    DayNumber = i.DayNumber,
+                    TimePeriod = i.TimePeriod,
+                    Title = i.Title,
+                    Content = i.Content
+                }).ToList(),
+                ProductAttractionRef = x.AttractionRefs.Select((refItem, index) => new ProductAttractionRef
+                {
+                    AttractionId = refItem.AttractionId,
+                    IsPreview = refItem.IsPreview,
+                    SortOrder = refItem.SortOrder > 0 ? refItem.SortOrder : index + 1
+                }).ToList()
             }).ToList();
         }
         // 依據ID取得單一商品
@@ -58,22 +63,27 @@ namespace southernTravel.Services
                 Category = x.Category,
                 Description = x.Description,
                 Price = x.Price,
-                // 將圖片映射到 DTO，並依 SortOrder 排序
+                MainImageUrl = x.MainImageUrl,
                 Images = x.Images
-                    .OrderBy(i => i.SortOrder) // 如果資料庫已有 sortOrder 就用這個
+                    .OrderBy(i => i.SortOrder)
                     .Select(i => new ProductImageDto
                     {
                         ImageId = i.ImageId,
                         ImageUrl = i.ImageUrl,
                         SortOrder = i.SortOrder
-                    })
-                    .ToList(),
+                    }).ToList(),
                 Itineraries = x.Itineraries.Select(i => new ItineraryDto
                 {
                     DayNumber = i.DayNumber,
                     TimePeriod = i.TimePeriod,
                     Title = i.Title,
                     Content = i.Content
+                }).ToList(),
+                ProductAttractionRef = x.AttractionRefs.Select((refItem, index) => new ProductAttractionRef
+                {
+                    AttractionId = refItem.AttractionId,
+                    IsPreview = refItem.IsPreview,
+                    SortOrder = refItem.SortOrder > 0 ? refItem.SortOrder : index + 1
                 }).ToList()
             };
         }
@@ -88,26 +98,33 @@ namespace southernTravel.Services
                 Tag2 = dto.Tag2,
                 DayNum = dto.DayNum,
                 Description = dto.Description,
-                Content = dto.Content,
                 OriginPrice = dto.OriginPrice,
                 Price = dto.Price,
                 Num = dto.Num,
-                ImageUrl1 = dto.ImageUrl1,
+                MainImageUrl = dto.MainImageUrl,
                 MaxTravelers = dto.MaxTravelers,
                 CreatedAt = DateTime.UtcNow,
+
                 Images = dto.Images.Select((img, index) => new ProductImage
                 {
                     ImageUrl = img.ImageUrl,
-                    SortOrder = index + 1 // ⭐ 每個 product 從 1 開始排序
+                    SortOrder = index + 1
                 }).ToList(),
+
                 Itineraries = dto.Itineraries.Select(i => new Itinerary
                 {
                     DayNumber = i.DayNumber,
                     TimePeriod = i.TimePeriod,
                     Title = i.Title,
                     Content = i.Content
-                    }).ToList()
-                };
+                }).ToList(),
+                AttractionRefs = dto.AttractionRefs.Select((refItem, index) => new ProductAttractionRef
+                {
+                    AttractionId = refItem.AttractionId,
+                    IsPreview = refItem.IsPreview,
+                    SortOrder = refItem.SortOrder > 0 ? refItem.SortOrder : index + 1
+                }).ToList()
+            };
 
             var result = await _productRepository.CreateProductAsync(product);
 
@@ -120,9 +137,8 @@ namespace southernTravel.Services
                 Tag2 = result.Tag2,
                 DayNum = result.DayNum,
                 Description = result.Description,
-                Content = result.Content,
                 Price = result.Price,
-                ImageUrl1 = result.ImageUrl1,
+                MainImageUrl = result.MainImageUrl,
                 IsEnabled = result.IsEnabled,
 
                 Images = result.Images.Select(img => new ProductImageDto
@@ -132,7 +148,6 @@ namespace southernTravel.Services
                     SortOrder = img.SortOrder
                 }).ToList(),
 
-                // 🔥 改這裡
                 Itineraries = result.Itineraries.Select(i => new ItineraryDto
                 {
                     DayNumber = i.DayNumber,
@@ -145,62 +160,73 @@ namespace southernTravel.Services
 
         public async Task<bool> UpdateProductAsync(int id, UpdateProductDto dto)
         {
-            var productList = await _productRepository.GetProductByIdAsync(id);
+            var product = await _productRepository.GetProductByIdAsync(id);
 
-            if (productList == null) throw new Exception("Product not found");
+            if (product == null) throw new Exception("Product not found");
 
+            // 基本資料更新
+            product.Title = dto.Title;
+            product.Category = dto.Category;
+            product.Tag1 = dto.Tag1;
+            product.Tag2 = dto.Tag2;
+            product.DayNum = dto.DayNum;
+            product.Description = dto.Description;
+            product.Price = dto.Price;
+            product.MainImageUrl = dto.MainImageUrl;
+            product.IsEnabled = dto.IsEnabled;
+            product.UpdatedAt = DateTime.UtcNow;
 
-            productList.Title = dto.Title;
-            productList.Category = dto.Category;
-            productList.Tag1 = dto.Tag1;
-            productList.Tag2 = dto.Tag2;
-            productList.DayNum = dto.DayNum;
-            productList.Description = dto.Description;
-            productList.Content = dto.Content;
-            productList.Price = dto.Price;
-            productList.ImageUrl1 = dto.ImageUrl1;
-            productList.IsEnabled = dto.IsEnabled;
-            productList.UpdatedAt = DateTime.UtcNow;
-            // ✅ ⭐重點：圖片「累加」不是覆蓋
+            // 1. 圖片處理 (維持你原本的累加邏輯，或是參考下方景點改為覆蓋)
             if (dto.Images != null && dto.Images.Any())
             {
-                var maxOrder = productList.Images.Any()
-                    ? productList.Images.Max(i => i.SortOrder)
-                    : 0;
-
+                var maxOrder = product.Images.Any() ? product.Images.Max(i => i.SortOrder) : 0;
                 var newImages = dto.Images.Select((img, index) => new ProductImage
                 {
                     ImageUrl = img.ImageUrl,
                     SortOrder = maxOrder + index + 1,
-                    ProductId = productList.ProductId
+                    ProductId = product.ProductId
                 }).ToList();
 
-                foreach (var img in newImages)
-                {
-                    productList.Images.Add(img);
-                }
+                foreach (var img in newImages) { product.Images.Add(img); }
             }
-            if(dto.Itineraries != null && dto.Itineraries.Any())
+
+            // 2. 行程處理 (Itineraries) - 同樣邏輯
+            if (dto.Itineraries != null && dto.Itineraries.Any())
             {
-                var maxDayNum = productList.Itineraries.Any()
-                    ? productList.Itineraries.Max(i => i.DayNumber)
-                    : 0;
                 var newItineraries = dto.Itineraries.Select(i => new Itinerary
                 {
                     DayNumber = i.DayNumber,
                     TimePeriod = i.TimePeriod,
                     Title = i.Title,
                     Content = i.Content,
-                    ProductId = productList.ProductId
+                    ProductId = product.ProductId
                 }).ToList();
-                foreach (var it in newItineraries)
+
+                foreach (var it in newItineraries) { product.Itineraries.Add(it); }
+            }
+
+            // 3. 景點關聯處理 (AttractionRefs) - 修正後的邏輯
+            if (dto.AttractionRefs != null)
+            {
+                // 建議做法：如果是更新，通常會先清空舊的關聯再重新建立，以達成「更新排序」或「刪除」的效果
+                product.AttractionRefs.Clear();
+
+                var newRefs = dto.AttractionRefs.Select((refItem, index) => new ProductAttractionRef
                 {
-                    productList.Itineraries.Add(it);
+                    ProductId = product.ProductId,
+                    AttractionId = refItem.AttractionId,
+                    IsPreview = refItem.IsPreview,
+                    // 如果 DTO 沒給 SortOrder，就用索引自動產生
+                    SortOrder = refItem.SortOrder > 0 ? refItem.SortOrder : index + 1
+                }).ToList();
+
+                foreach (var ar in newRefs)
+                {
+                    product.AttractionRefs.Add(ar);
                 }
             }
 
-            await _productRepository.UpdateProductAsync(productList);
-
+            await _productRepository.UpdateProductAsync(product);
             return true;
         }
 
