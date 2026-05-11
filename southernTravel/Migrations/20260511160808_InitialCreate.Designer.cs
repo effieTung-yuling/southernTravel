@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using southernTravel.Data;
 
@@ -10,9 +11,11 @@ using southernTravel.Data;
 namespace southernTravel.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260511160808_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
@@ -71,26 +74,48 @@ namespace southernTravel.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("created_at");
 
+                    b.Property<decimal>("FinalTotal")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("final_total");
 
                     b.Property<int>("MemberId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("member_id");
 
                     b.HasKey("Id");
 
+                    b.ToTable("carts");
                 });
 
             modelBuilder.Entity("southernTravel.Model.CartItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("id");
 
                     b.Property<int>("CartId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("cart_id");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("price");
 
                     b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("product_id");
 
                     b.Property<int>("Qty")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("qty");
 
+                    b.Property<decimal>("Total")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("total");
 
                     b.HasKey("Id");
 
@@ -98,30 +123,44 @@ namespace southernTravel.Migrations
 
                     b.HasIndex("ProductId");
 
+                    b.ToTable("cart_items");
                 });
 
             modelBuilder.Entity("southernTravel.Model.Itinerary", b =>
                 {
                     b.Property<int>("ItineraryId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("itinerary_id");
 
                     b.Property<string>("Content")
                         .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("content");
 
                     b.Property<int>("DayNumber")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("day_number");
 
                     b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("product_id");
 
                     b.Property<string>("TimePeriod")
                         .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("time_period");
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("title");
 
                     b.HasKey("ItineraryId");
 
                     b.HasIndex("ProductId");
 
+                    b.ToTable("itineraries");
                 });
 
             modelBuilder.Entity("southernTravel.Model.Member", b =>
@@ -192,10 +231,6 @@ namespace southernTravel.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("category");
 
-                    b.Property<string>("Content")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("content");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT")
                         .HasColumnName("created_at");
@@ -220,15 +255,13 @@ namespace southernTravel.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("go_start_date");
 
-                    b.Property<string>("imageUrl")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("image_url");
-
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("INTEGER")
                         .HasColumnName("is_enabled");
 
+                    b.Property<string>("MainImageUrl")
                         .HasColumnType("TEXT")
+                        .HasColumnName("main_image_url");
 
                     b.Property<int?>("MaxTravelers")
                         .HasColumnType("INTEGER")
@@ -239,9 +272,11 @@ namespace southernTravel.Migrations
                         .HasColumnName("num");
 
                     b.Property<decimal>("OriginPrice")
+                        .HasColumnType("decimal(18,2)")
                         .HasColumnName("origin_price");
 
                     b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)")
                         .HasColumnName("price");
 
                     b.Property<DateTime?>("StartDate")
