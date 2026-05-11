@@ -69,7 +69,11 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
 
 // 註冊 Controller
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    // 忽略循環引用，避免直接當機
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
 builder.Services.AddOpenApi();
 
 var app = builder.Build();

@@ -26,6 +26,9 @@ namespace southernTravel.Services
                 Description = x.Description,
                 Price = x.Price,
                 MainImageUrl = x.MainImageUrl,
+                DayNum = x.DayNum,
+                Tag1= x.Tag1,
+                Tag2 = x.Tag2,
                 Images = x.Images
                     .OrderBy(i => i.SortOrder)
                     .Select(i => new ProductImageDto
@@ -41,11 +44,13 @@ namespace southernTravel.Services
                     Title = i.Title,
                     Content = i.Content
                 }).ToList(),
-                ProductAttractionRef = x.AttractionRefs.Select((refItem, index) => new ProductAttractionRef
+                AttractionRefs = x.AttractionRefs.Select(x => new ProductAttractionRefDto
                 {
-                    AttractionId = refItem.AttractionId,
-                    IsPreview = refItem.IsPreview,
-                    SortOrder = refItem.SortOrder > 0 ? refItem.SortOrder : index + 1
+                    RefId = x.RefId,
+                    ProductId = x.ProductId,
+                    AttractionId = x.AttractionId,
+                    IsPreview = x.IsPreview,
+                    SortOrder = x.SortOrder
                 }).ToList()
             }).ToList();
         }
@@ -64,6 +69,9 @@ namespace southernTravel.Services
                 Description = x.Description,
                 Price = x.Price,
                 MainImageUrl = x.MainImageUrl,
+                DayNum = x.DayNum,
+                Tag1 = x.Tag1,
+                Tag2 = x.Tag2,
                 Images = x.Images
                     .OrderBy(i => i.SortOrder)
                     .Select(i => new ProductImageDto
@@ -79,11 +87,14 @@ namespace southernTravel.Services
                     Title = i.Title,
                     Content = i.Content
                 }).ToList(),
-                ProductAttractionRef = x.AttractionRefs.Select((refItem, index) => new ProductAttractionRef
+                // 回傳時：Entity -> Response DTO
+                AttractionRefs = x.AttractionRefs.Select(x => new ProductAttractionRefDto
                 {
-                    AttractionId = refItem.AttractionId,
-                    IsPreview = refItem.IsPreview,
-                    SortOrder = refItem.SortOrder > 0 ? refItem.SortOrder : index + 1
+                    RefId = x.RefId,
+                    ProductId = x.ProductId,
+                    AttractionId = x.AttractionId,
+                    IsPreview = x.IsPreview,
+                    SortOrder = x.SortOrder
                 }).ToList()
             };
         }
@@ -118,11 +129,12 @@ namespace southernTravel.Services
                     Title = i.Title,
                     Content = i.Content
                 }).ToList(),
-                AttractionRefs = dto.AttractionRefs.Select((refItem, index) => new ProductAttractionRef
+                // 建立時：Request DTO -> Entity
+                AttractionRefs = dto.AttractionRefs.Select((x, index) => new ProductAttractionRef
                 {
-                    AttractionId = refItem.AttractionId,
-                    IsPreview = refItem.IsPreview,
-                    SortOrder = refItem.SortOrder > 0 ? refItem.SortOrder : index + 1
+                    AttractionId = x.AttractionId,
+                    IsPreview = x.IsPreview,
+                    SortOrder = x.SortOrder > 0 ? x.SortOrder : index + 1
                 }).ToList()
             };
 
@@ -154,6 +166,16 @@ namespace southernTravel.Services
                     TimePeriod = i.TimePeriod,
                     Title = i.Title,
                     Content = i.Content
+                }).ToList(),
+
+                // 回傳時：Entity -> Response DTO
+                AttractionRefs = result.AttractionRefs.Select(x => new ProductAttractionRefDto
+                {
+                    RefId = x.RefId,
+                    ProductId = x.ProductId,
+                    AttractionId = x.AttractionId,
+                    IsPreview = x.IsPreview,
+                    SortOrder = x.SortOrder
                 }).ToList()
             };
         }
@@ -162,7 +184,7 @@ namespace southernTravel.Services
         {
             var product = await _productRepository.GetProductByIdAsync(id);
 
-            if (product == null) throw new Exception("Product not found");
+            if (product == null) throw new Exception($"Product with ID {id} not found");
 
             // 基本資料更新
             product.Title = dto.Title;

@@ -31,4 +31,21 @@ namespace southernTravel.Model
         [ForeignKey("AttractionId")]
         public virtual Attraction Attraction { get; set; }
     }
+
+    public class ProductAttractionShortDto
+    {
+        public int AttractionId { get; set; }
+        public bool IsPreview { get; set; }
+        public int SortOrder { get; set; }
+        // 如果需要，頂多加一個 AttractionName，不要把整個 Attraction 物件塞進來
+    }
+
+    public class ProductAttractionRefDto
+    {
+        public int RefId { get; set; }
+        public int ProductId { get; set; }
+        public int AttractionId { get; set; }
+        public bool IsPreview { get; set; }
+        public int SortOrder { get; set; }
+    }
 }
