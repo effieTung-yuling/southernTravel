@@ -18,6 +18,7 @@ namespace southernTravel.Repositories
             return await _context.Products
                     .Include(p => p.Images)
                     .Include(p => p.Itineraries)
+                    .Include(p => p.AttractionRefs)
                     .ToListAsync();
         }
         public async Task<Product?> GetProductByIdAsync(int id)
@@ -25,6 +26,7 @@ namespace southernTravel.Repositories
             return await _context.Products
                     .Include(p => p.Images)
                     .Include(p => p.Itineraries)
+                    .Include(p => p.AttractionRefs)
                     .FirstOrDefaultAsync(p => p.ProductId == id);
         }
 

@@ -1,6 +1,10 @@
 ﻿using southernTravel.DTOs;
 using southernTravel.Model;
 using southernTravel.Repositories;
+using System.Security.Claims;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt; // 記得引用這個
+using Microsoft.IdentityModel.Tokens;
 
 namespace southernTravel.Services
 {
@@ -76,19 +80,40 @@ namespace southernTravel.Services
 
         // 根據 Email 取得會員
         // 登入會員
-        public async Task<Member?> LoginAsync(string email, string password)
+        public async Task<string?> LoginAsync(string email, string password)
         {
-            // 1. 先用 Email 找人
+            // 1. 透過 Repo 去 Neon 資料庫撈資料
             var member = await _memberRepository.GetByEmailAsync(email);
 
-            // 2. 如果找不到人，或者密碼不對（暫時用明文比對）
+            // 2. 驗證 (目前先比對明碼，之後強烈建議改雜湊)
             if (member == null || member.PasswordHash != password)
             {
                 return null;
             }
 
-            // 3. 驗證成功，回傳會員資料
-            return member;
+            // 3. 產生 JWT Token
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            // 從 Render 環境變數抓 Key
+            var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
+            if (string.IsNullOrEmpty(jwtKey)) throw new Exception("Render 環境變數未設定 JWT_KEY");
+
+            var key = Encoding.UTF8.GetBytes(jwtKey);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, member.Id.ToString()),
+                    new Claim(ClaimTypes.Email, member.Email),
+                    new Claim(ClaimTypes.Name, member.Name)
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }

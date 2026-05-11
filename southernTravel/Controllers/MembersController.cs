@@ -166,24 +166,16 @@ namespace southernTravel.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
-            var member = await _service.LoginAsync(request.Email, request.Password);
+            // 呼叫大腦 (Service) 幫我處理登入
+            var token = await _service.LoginAsync(request.Email, request.Password);
 
-            if (member == null)
+            if (token == null)
             {
-                return BadRequest(new { message = "帳號或密碼錯誤" });
+                return Unauthorized(new { message = "帳號或密碼錯誤" });
             }
 
-            // 登入成功，回傳你想讓前端存入 Pinia 的資訊
-            return Ok(new
-            {
-                message = "登入成功",
-                user = new
-                {
-                    member.Id,
-                    member.Name,
-                    member.Email
-                }
-            });
+            // 成功了，把 Token 丟給前端 Vue (Pinia)
+            return Ok(new { token });
         }
     }
 }

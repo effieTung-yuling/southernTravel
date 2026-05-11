@@ -5,17 +5,13 @@ namespace southernTravel.Services
 {
     public interface IMemberService
     {
-        // 取得所有會員
         Task<List<Member>> GetAllMembersAsync();
-        // 根據 ID 取得會員
         Task<Member?> GetMemberByIdAsync(int id);
-        // 註冊會員
         Task<bool> RegisterMemberAsync(Member member);
-        // 更新會員資料
         Task<bool> UpdateMemberAsync(int id, UpdateMemberRequest request);
-        // 刪除會員
         Task<bool> DeleteMemberAsync(int id);
-        // 根據 Email 取得會員
-        Task<Member?> LoginAsync(string email, string password);
+
+        // 修正：登入成功應該回傳 Token 字串，失敗回傳 null
+        Task<string?> LoginAsync(string email, string password);
     }
 }
