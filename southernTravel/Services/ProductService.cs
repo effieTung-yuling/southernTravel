@@ -188,17 +188,6 @@ namespace southernTravel.Services
             product.IsEnabled = dto.IsEnabled;
             product.UpdatedAt = DateTime.UtcNow;
 
-            productList.Title = dto.Title;
-            productList.Category = dto.Category;
-            productList.Tag1 = dto.Tag1;
-            productList.Tag2 = dto.Tag2;
-            productList.DayNum = dto.DayNum;
-            productList.Description = dto.Description;
-            productList.Content = dto.Content;
-            productList.Price = dto.Price;
-            productList.ImageUrl1 = dto.ImageUrl1;
-            productList.IsEnabled = dto.IsEnabled;
-            productList.UpdatedAt = DateTime.UtcNow;
             // ✅ ⭐重點：圖片「累加」不是覆蓋
             if (dto.Images != null && dto.Images.Any())
             {
