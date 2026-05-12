@@ -8,9 +8,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace southernTravel.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class MembersController : ControllerBase
     {
         private readonly IMemberService _service;
