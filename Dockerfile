@@ -4,7 +4,8 @@ WORKDIR /app
 COPY . .
 WORKDIR /app/southernTravel
 RUN dotnet restore
-RUN dotnet publish -c Release -o /app/out
+# 假設您的專案檔名是 southernTravel.csproj
+RUN dotnet publish southernTravel.csproj -c Release -o /app/out
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
