@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using southernTravel.DTOs;
 using southernTravel.Model;
@@ -9,6 +10,7 @@ namespace southernTravel.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class MembersController : ControllerBase
     {
         private readonly IMemberService _service;
@@ -65,6 +67,7 @@ namespace southernTravel.Controllers
             }
         }
         // 註冊會員
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
@@ -163,6 +166,7 @@ namespace southernTravel.Controllers
         }
 
         // 根據 Email 取得會員
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
