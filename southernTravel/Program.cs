@@ -1,11 +1,15 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using southernTravel.Data;
 using southernTravel.Repositories;
 using southernTravel.Services;
 using southernTravel.Validators;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. 註冊 CORS 服務
@@ -34,6 +38,34 @@ else
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseNpgsql(connectionString));
 }
+
+// JWT 驗證
+var jwtKey = builder.Configuration["JWT_KEY"];
+if (string.IsNullOrWhiteSpace(jwtKey))
+{
+    throw new Exception("未設定 JWT_KEY");
+}
+
+var keyBytes = Encoding.UTF8.GetBytes(jwtKey);
+if (keyBytes.Length < 32)
+{
+    throw new Exception("JWT_KEY 長度不足，至少需要 32 bytes");
+}
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
 builder.Services.AddScoped<MemberRepository>();
 builder.Services.AddScoped<MemberService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -47,6 +79,7 @@ builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 builder.Services.AddScoped<IMemberService, MemberService>();
 builder.Services.AddScoped<IAttractionRepository, AttractionRepository>();
 builder.Services.AddScoped<IAttractionService, AttractionService>();
+
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.InvalidModelStateResponseFactory = context =>
@@ -65,7 +98,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
         });
     };
 });
-// 註冊所有在目前 Assembly 中的 Validator
+
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
 
 // 註冊 Controller
@@ -88,6 +121,7 @@ app.MapScalarApiReference(options => {
            .WithTheme(ScalarTheme.Moon);
 });
 
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
