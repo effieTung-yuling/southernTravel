@@ -40,7 +40,8 @@ else
 }
 
 // JWT 驗證
-var jwtKey = builder.Configuration["JwtSettings:JWT_KEY"];
+var jwtKey = builder.Configuration["JwtSettings:JWT_KEY"]
+             ?? builder.Configuration["JWT_KEY"];
 
 if (string.IsNullOrWhiteSpace(jwtKey))
 {
