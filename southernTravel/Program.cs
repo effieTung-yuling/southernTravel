@@ -83,6 +83,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddAuthorization();
+
 builder.Services.AddScoped<MemberRepository>();
 builder.Services.AddScoped<MemberService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
