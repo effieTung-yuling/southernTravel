@@ -15,7 +15,7 @@ namespace southernTravel.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.0");
 
             modelBuilder.Entity("southernTravel.Model.Attraction", b =>
                 {
@@ -144,7 +144,6 @@ namespace southernTravel.Migrations
                         .HasColumnName("product_id");
 
                     b.Property<string>("TimePeriod")
-                        .IsRequired()
                         .HasColumnType("TEXT")
                         .HasColumnName("time_period");
 
@@ -183,6 +182,11 @@ namespace southernTravel.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER")
                         .HasColumnName("is_active");
+
+                    b.Property<string>("MemberType")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("member_type");
 
                     b.Property<string>("Name")
                         .IsRequired()

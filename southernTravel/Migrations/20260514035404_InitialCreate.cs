@@ -59,6 +59,7 @@ namespace southernTravel.Migrations
                     birthday = table.Column<DateTime>(type: "TEXT", nullable: false),
                     profile_image = table.Column<string>(type: "TEXT", nullable: true),
                     notes = table.Column<string>(type: "TEXT", nullable: true),
+                    member_type = table.Column<string>(type: "TEXT", nullable: false),
                     is_active = table.Column<bool>(type: "INTEGER", nullable: false),
                     created_at = table.Column<DateTime>(type: "TEXT", nullable: false),
                     updated_at = table.Column<DateTime>(type: "TEXT", nullable: true)
@@ -136,7 +137,7 @@ namespace southernTravel.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     product_id = table.Column<int>(type: "INTEGER", nullable: false),
                     day_number = table.Column<int>(type: "INTEGER", nullable: false),
-                    time_period = table.Column<string>(type: "TEXT", nullable: false),
+                    time_period = table.Column<string>(type: "TEXT", nullable: true),
                     title = table.Column<string>(type: "TEXT", nullable: false),
                     content = table.Column<string>(type: "TEXT", nullable: false)
                 },

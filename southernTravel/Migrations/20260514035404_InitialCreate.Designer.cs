@@ -11,14 +11,14 @@ using southernTravel.Data;
 namespace southernTravel.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260511160808_InitialCreate")]
+    [Migration("20260514035404_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.0");
 
             modelBuilder.Entity("southernTravel.Model.Attraction", b =>
                 {
@@ -147,7 +147,6 @@ namespace southernTravel.Migrations
                         .HasColumnName("product_id");
 
                     b.Property<string>("TimePeriod")
-                        .IsRequired()
                         .HasColumnType("TEXT")
                         .HasColumnName("time_period");
 
@@ -186,6 +185,11 @@ namespace southernTravel.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER")
                         .HasColumnName("is_active");
+
+                    b.Property<string>("MemberType")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("member_type");
 
                     b.Property<string>("Name")
                         .IsRequired()
