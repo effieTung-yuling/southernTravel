@@ -17,8 +17,8 @@ namespace southernTravel.Model
         [Column("time_period")]
         public string? TimePeriod { get; set; }
 
-        [Column("title")]
-        public required string Title { get; set; }
+        [Column("location_title")]
+        public required string LocationTitle { get; set; }
 
         [Column("content")]
         public required string Content { get; set; }

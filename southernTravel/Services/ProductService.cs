@@ -42,7 +42,7 @@ namespace southernTravel.Services
                     {
                         DayNumber = i.DayNumber,
                         TimePeriod = i.TimePeriod,
-                        Title = i.Title,
+                        LocationTitle = i.LocationTitle,
                         Content = i.Content
                     }).ToList()
             }).ToList();
@@ -74,7 +74,7 @@ namespace southernTravel.Services
                 {
                     DayNumber = i.DayNumber,
                     TimePeriod = i.TimePeriod,
-                    Title = i.Title,
+                    LocationTitle = i.LocationTitle,
                     Content = i.Content
                 }).ToList(),
                 // 回傳時：Entity -> Response DTO
@@ -116,7 +116,7 @@ namespace southernTravel.Services
             {
                 DayNumber = i.DayNumber,
                 TimePeriod = i.TimePeriod,
-                Title = i.Title,
+                LocationTitle = i.LocationTitle,
                 Content = i.Content,
                 Product = product
             }).ToList();
@@ -154,7 +154,7 @@ namespace southernTravel.Services
                 {
                     DayNumber = i.DayNumber,
                     TimePeriod = i.TimePeriod,
-                    Title = i.Title,
+                    LocationTitle = i.LocationTitle,
                     Content = i.Content
                 }).ToList(),
                 AttractionRefs = result.AttractionRefs.Select(x => new ProductAttractionRefDto
@@ -206,7 +206,7 @@ namespace southernTravel.Services
                 {
                     DayNumber = i.DayNumber,
                     TimePeriod = i.TimePeriod,
-                    Title = i.Title,
+                    LocationTitle = i.LocationTitle,
                     Content = i.Content,
                     ProductId = product.ProductId,
                     Product = product

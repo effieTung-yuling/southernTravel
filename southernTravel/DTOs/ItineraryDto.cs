@@ -6,7 +6,6 @@
 
         public int DayNumber { get; set; }
         public string? TimePeriod { get; set; }
-        public required string Title { get; set; }
         public required string Content { get; set; }
     }
     public class ItineraryDto
@@ -15,7 +14,7 @@
 
         public string? TimePeriod { get; set; }
 
-        public required string Title { get; set; }
+        public required string LocationTitle { get; set; }
 
         public required string Content { get; set; }
     }
