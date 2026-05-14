@@ -1,26 +1,41 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using southernTravel.DTOs;
 using southernTravel.Services;
+using System.Security.Claims;
 
 namespace southernTravel.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CartController : ControllerBase
     {
         private readonly ICartService _service;
+
         public CartController(ICartService service)
         {
             _service = service;
         }
 
-        [HttpGet("{memberId}")]
-        public async Task<IActionResult> GetCart(int memberId)
+        private int GetMemberIdFromToken()
         {
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                     ?? User.FindFirst("memberId")?.Value;
+
+            if (claim == null || !int.TryParse(claim, out var memberId))
+                throw new UnauthorizedAccessException("無法從 Token 取得會員 ID");
+
+            return memberId;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCart()
+        {
+            var memberId = GetMemberIdFromToken();
             var cart = await _service.GetCartAsync(memberId);
             if (cart == null)
             {
-                // 這裡就是改掉 204 的地方，改回傳 404 並自訂訊息
                 return NotFound(new
                 {
                     status = 404,
@@ -31,9 +46,10 @@ namespace southernTravel.Controllers
             return Ok(cart);
         }
 
-        [HttpPost("{memberId}/items")]
-        public async Task<IActionResult> AddItem(int memberId, [FromBody] CreateCartItemDto dto)
+        [HttpPost("items")]
+        public async Task<IActionResult> AddItem([FromBody] CreateCartItemDto dto)
         {
+            var memberId = GetMemberIdFromToken();
             var item = await _service.AddItemAsync(memberId, dto);
             return Ok(dto);
         }
