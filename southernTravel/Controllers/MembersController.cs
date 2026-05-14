@@ -1,10 +1,10 @@
-﻿using FluentValidation;
+﻿using BCrypt.Net;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using southernTravel.DTOs;
 using southernTravel.Model;
 using southernTravel.Services;
-using System.ComponentModel.DataAnnotations;
 
 namespace southernTravel.Controllers
 {
@@ -15,20 +15,21 @@ namespace southernTravel.Controllers
     {
         private readonly IMemberService _service;
         private readonly IValidator<RegisterRequest> _validator;
+
         public MembersController(IMemberService service, IValidator<RegisterRequest> validator)
         {
             _service = service;
             _validator = validator;
         }
-
         // 取出所有會員
-        [HttpGet] // GET api/Member
+        // 只有管理員能看清單
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
         public async Task<IActionResult> GetAllMembers()
         {
             try
             {
                 var members = await _service.GetAllMembersAsync();
-
                 return Ok(members);
             }
             catch (Exception ex)
@@ -38,11 +39,20 @@ namespace southernTravel.Controllers
         }
 
         // 取出單一會員
-        [HttpGet("{id}")] // 這裡定義了路徑參數，例如：api/Member/5
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try
             {
+                // 1. 從 Token 中取得當前登入者的 ID
+                var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+                // 2. 判斷：如果不是本人，且也不是管理員，就報錯
+                if (currentUserId != id.ToString() && !User.IsInRole("Admin"))
+                {
+                    return Forbid(); // 回傳 403 Forbidden
+                }
+
                 var member = await _service.GetMemberByIdAsync(id);
 
                 if (member == null)
@@ -50,7 +60,6 @@ namespace southernTravel.Controllers
                     return NotFound($"找不到 ID 為 {id} 的會員");
                 }
 
-                // 安全提醒：回傳時建議不要包含 PasswordHash
                 return Ok(new
                 {
                     member.Id,
@@ -66,6 +75,7 @@ namespace southernTravel.Controllers
                 return StatusCode(500, $"查詢失敗：{ex.Message}");
             }
         }
+
         // 註冊會員
         [AllowAnonymous]
         [HttpPost("register")]
@@ -93,11 +103,13 @@ namespace southernTravel.Controllers
                 {
                     return BadRequest("生日格式錯誤，請使用 YYYY-MM-DD");
                 }
+
                 var newMember = new Member
                 {
                     Name = request.Name,
                     Email = request.Email,
-                    PasswordHash = request.Password,
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
+                    MemberType = "Member", // 預設新註冊的都是一般會員，不能讓人自訂成 Admin
                     PhoneNumber = request.PhoneNumber,
                     Birthday = DateTime.SpecifyKind(birthday, DateTimeKind.Utc),
                     IsActive = true,
@@ -129,6 +141,12 @@ namespace southernTravel.Controllers
         {
             try
             {
+                // 同樣的檢查邏輯
+                var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                if (currentUserId != id.ToString() && !User.IsInRole("Admin"))
+                {
+                    return Forbid();
+                }
                 var result = await _service.UpdateMemberAsync(id, request);
 
                 if (!result)
@@ -150,6 +168,12 @@ namespace southernTravel.Controllers
         {
             try
             {
+                // 同樣的檢查邏輯
+                var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                if (currentUserId != id.ToString() && !User.IsInRole("Admin"))
+                {
+                    return Forbid();
+                }
                 var result = await _service.DeleteMemberAsync(id);
 
                 if (!result)
@@ -165,21 +189,21 @@ namespace southernTravel.Controllers
             }
         }
 
-        // 根據 Email 取得會員
+        // 登入
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
-            // 呼叫大腦 (Service) 幫我處理登入
-            var token = await _service.LoginAsync(request.Email, request.Password);
+            if (request == null) return BadRequest("資料不能為空");
 
-            if (token == null)
+            var result = await _service.LoginAsync(request.Email, request.Password);
+
+            if (result == null)
             {
                 return Unauthorized(new { message = "帳號或密碼錯誤" });
             }
 
-            // 成功了，把 Token 丟給前端 Vue (Pinia)
-            return Ok(new { token });
+            return Ok(result);
         }
     }
 }

@@ -29,7 +29,8 @@ namespace southernTravel.Model
 
         [Column("notes")]
         public string? Notes { get; set; }
-
+        [Column("member_type")]
+        public string MemberType { get; set; } = "Member";// 預設為一般會員，未來可以擴充成 VIP、Admin 等等
         [Column("is_active")]
         public bool IsActive { get; set; } = true;
 

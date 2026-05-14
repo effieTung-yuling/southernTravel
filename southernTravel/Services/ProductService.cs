@@ -105,28 +105,30 @@ namespace southernTravel.Services
                 MainImageUrl = dto.MainImageUrl,
                 MaxTravelers = dto.MaxTravelers,
                 CreatedAt = DateTime.UtcNow,
-
                 Images = dto.Images.Select((img, index) => new ProductImage
                 {
                     ImageUrl = img.ImageUrl,
                     SortOrder = index + 1
-                }).ToList(),
-
-                Itineraries = dto.Itineraries.Select(i => new Itinerary
-                {
-                    DayNumber = i.DayNumber,
-                    TimePeriod = i.TimePeriod,
-                    Title = i.Title,
-                    Content = i.Content
-                }).ToList(),
-                // 建立時：Request DTO -> Entity
-                AttractionRefs = dto.AttractionRefs.Select((x, index) => new ProductAttractionRef
-                {
-                    AttractionId = x.AttractionId,
-                    IsPreview = x.IsPreview,
-                    SortOrder = x.SortOrder > 0 ? x.SortOrder : index + 1
                 }).ToList()
             };
+
+            product.Itineraries = dto.Itineraries.Select(i => new Itinerary
+            {
+                DayNumber = i.DayNumber,
+                TimePeriod = i.TimePeriod,
+                Title = i.Title,
+                Content = i.Content,
+                Product = product
+            }).ToList();
+
+            product.AttractionRefs = dto.AttractionRefs.Select((x, index) => new ProductAttractionRef
+            {
+                AttractionId = x.AttractionId,
+                IsPreview = x.IsPreview,
+                SortOrder = x.SortOrder > 0 ? x.SortOrder : index + 1,
+                Product = product,
+                Attraction = null!
+            }).ToList();
 
             var result = await _productRepository.CreateProductAsync(product);
 
@@ -142,14 +144,12 @@ namespace southernTravel.Services
                 Price = result.Price,
                 MainImageUrl = result.MainImageUrl,
                 IsEnabled = result.IsEnabled,
-
                 Images = result.Images.Select(img => new ProductImageDto
                 {
                     ImageId = img.ImageId,
                     ImageUrl = img.ImageUrl,
                     SortOrder = img.SortOrder
                 }).ToList(),
-
                 Itineraries = result.Itineraries.Select(i => new ItineraryDto
                 {
                     DayNumber = i.DayNumber,
@@ -157,8 +157,6 @@ namespace southernTravel.Services
                     Title = i.Title,
                     Content = i.Content
                 }).ToList(),
-
-                // 回傳時：Entity -> Response DTO
                 AttractionRefs = result.AttractionRefs.Select(x => new ProductAttractionRefDto
                 {
                     RefId = x.RefId,
@@ -176,7 +174,6 @@ namespace southernTravel.Services
 
             if (product == null) throw new Exception($"Product with ID {id} not found");
 
-            // 基本資料更新
             product.Title = dto.Title;
             product.Category = dto.Category;
             product.Tag1 = dto.Tag1;
@@ -211,7 +208,8 @@ namespace southernTravel.Services
                     TimePeriod = i.TimePeriod,
                     Title = i.Title,
                     Content = i.Content,
-                    ProductId = product.ProductId
+                    ProductId = product.ProductId,
+                    Product = product
                 }).ToList();
 
                 foreach (var it in newItineraries) { product.Itineraries.Add(it); }
@@ -228,8 +226,9 @@ namespace southernTravel.Services
                     ProductId = product.ProductId,
                     AttractionId = refItem.AttractionId,
                     IsPreview = refItem.IsPreview,
-                    // 如果 DTO 沒給 SortOrder，就用索引自動產生
-                    SortOrder = refItem.SortOrder > 0 ? refItem.SortOrder : index + 1
+                    SortOrder = refItem.SortOrder > 0 ? refItem.SortOrder : index + 1,
+                    Product = product,
+                    Attraction = null!
                 }).ToList();
 
                 foreach (var ar in newRefs)

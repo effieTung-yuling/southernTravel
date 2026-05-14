@@ -16,7 +16,7 @@
         public int Id { get; set; }
         public int MemberId { get; set; }
         public decimal FinalTotal { get; set; }
-        public List<CartItemDto> Items { get; set; }
+        public required List<CartItemDto> Items { get; set; }
     }
 
     public class CartItemDto

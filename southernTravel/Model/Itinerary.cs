@@ -15,15 +15,15 @@ namespace southernTravel.Model
         public int DayNumber { get; set; }
 
         [Column("time_period")]
-        public string TimePeriod { get; set; }
+        public string? TimePeriod { get; set; }
 
         [Column("title")]
-        public string Title { get; set; }
+        public required string Title { get; set; }
 
         [Column("content")]
-        public string Content { get; set; }
+        public required string Content { get; set; }
 
         // 🔥 關聯
-        public Product Product { get; set; }
+        public required Product Product { get; set; }
     }
 }

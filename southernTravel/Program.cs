@@ -40,10 +40,11 @@ else
 }
 
 // JWT 驗證
-var jwtKey = builder.Configuration["JWT_KEY"];
+var jwtKey = builder.Configuration["JwtSettings:JWT_KEY"];
+
 if (string.IsNullOrWhiteSpace(jwtKey))
 {
-    throw new Exception("未設定 JWT_KEY");
+    throw new Exception("未設定 JWT_KEY，請檢查 appsettings.json 中的 JwtSettings 區塊");
 }
 
 var keyBytes = Encoding.UTF8.GetBytes(jwtKey);
@@ -85,10 +86,10 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.InvalidModelStateResponseFactory = context =>
     {
         var errors = context.ModelState
-            .Where(e => e.Value.Errors.Count > 0)
+            .Where(e => e.Value?.Errors.Count > 0)
             .ToDictionary(
                 kvp => kvp.Key,
-                kvp => kvp.Value.Errors.Select(er => er.ErrorMessage).ToArray()
+                kvp => kvp.Value!.Errors.Select(er => er.ErrorMessage).ToArray()
             );
 
         return new BadRequestObjectResult(new

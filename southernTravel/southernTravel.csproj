@@ -1,29 +1,41 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="12.1.1" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
-	  <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
-	  <PackageReference Include="Scalar.AspNetCore" Version="2.12.37" />
-	  <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.7" />
-	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.18.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<!-- 驗證相關 -->
+		<PackageReference Include="FluentValidation" Version="11.11.0" />
+		<!-- 註：建議檢查 12.1.1 是否已正式發布，目前常用為 11.x -->
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+		<PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+
+		<!-- 身分證書與 JWT -->
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.1" />
+		<!-- 建議使用 8.x 最新穩定版 -->
+
+		<!-- OpenAPI 與 UI (.NET 9 標配) -->
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
+		<PackageReference Include="Scalar.AspNetCore" Version="1.2.*" />
+		<!-- 建議使用萬用字元跟隨最新修正 -->
+
+		<!-- 資料庫相關 (EF Core 9) -->
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
+
+		<!-- 開發工具 (僅在開發時需要，打包時排除) -->
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
 
 </Project>

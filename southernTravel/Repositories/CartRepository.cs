@@ -47,7 +47,7 @@ namespace southernTravel.Repositories
         {
             return await _context.CartItems
                 .Include(ci => ci.Cart)
-                .ThenInclude(c => c.CartItems)
+                .ThenInclude(c => c!.CartItems)
                 .FirstOrDefaultAsync(ci => ci.Id == cartItemId);
         }
     }
