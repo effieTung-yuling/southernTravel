@@ -172,7 +172,7 @@ namespace southernTravel.Services
         {
             var product = await _productRepository.GetProductByIdAsync(id);
 
-            if (product == null) throw new Exception($"Product with ID {id} not found");
+            if (product == null) return false;
 
             product.Title = dto.Title;
             product.Category = dto.Category;

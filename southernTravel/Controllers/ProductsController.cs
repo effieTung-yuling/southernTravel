@@ -20,6 +20,8 @@ namespace southernTravel.Controllers
         public async Task<IActionResult> GetAll()
         {
             var result = await _service.GetAllProductsAsync();
+            if (result == null || !result.Any())
+                return NotFound("目前尚無產品資料，請新增產品資料。");
             return Ok(result);
         }
 
@@ -28,16 +30,18 @@ namespace southernTravel.Controllers
         {
             var result = await _service.GetProductByIdAsync(id);
             if (result == null)
-                return NotFound();
+                return NotFound($"找不到 ID 為 {id} 的產品資料，請確認後重試。");
             return Ok(result);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateProduct(CreateProductDto dto)
         {
-            var result = await _service.CreateProductAsync(dto);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            return Ok(result);
+            var result = await _service.CreateProductAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = result.ProductId }, result);
         }
 
         [HttpPut("{id}")]
@@ -46,7 +50,7 @@ namespace southernTravel.Controllers
             var success = await _service.UpdateProductAsync(id, dto);
 
             if (!success)
-                return NotFound();
+                return NotFound($"找不到 ID 為 {id} 的產品資料，請確認後重試。");
 
             return Ok("更新成功");
         }
@@ -58,9 +62,9 @@ namespace southernTravel.Controllers
             var success = await _service.DeleteProductAsync(id);
 
             if (!success)
-                return NotFound();
+                return NotFound($"找不到 ID 為 {id} 的產品資料，請確認後重試。");
 
-            return Ok(success);
+            return Ok("刪除成功");
         }
     }
 }

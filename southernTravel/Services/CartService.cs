@@ -19,20 +19,11 @@ namespace southernTravel.Services
             _context = context;
         }
 
-        public async Task<CartDto> GetCartAsync(int memberId)
+        public async Task<CartDto?> GetCartAsync(int memberId)
         {
             var cart = await _repo.GetCartByMemberIdAsync(memberId);
 
-            // 如果找不到，直接回傳一個初始化的空 DTO，而不是 null
-            if (cart == null)
-            {
-                return new CartDto
-                {
-                    MemberId = memberId,
-                    Items = new List<CartItemDto>(),
-                    FinalTotal = 0
-                };
-            }
+            if (cart == null) return null;
 
             return new CartDto
             {
@@ -50,11 +41,11 @@ namespace southernTravel.Services
             };
         }
 
-        public async Task<CartItemDto> AddItemAsync(int memberId, CreateCartItemDto dto)
+        public async Task<CartItemDto?> AddItemAsync(int memberId, CreateCartItemDto dto)
         {
             // 1. 找商品
             var product = await _productRepository.GetProductByIdAsync(dto.ProductId);
-            if (product == null) throw new Exception("Product not found");
+            if (product == null) return null;
 
             // 2. 找或建立 Cart
             var cart = await _repo.GetCartByMemberIdAsync(memberId);
@@ -68,17 +59,31 @@ namespace southernTravel.Services
                 await _context.SaveChangesAsync();
             }
 
-            // 3. 建立 CartItem
-            var item = new CartItem
-            {
-                CartId = cart.Id,
-                ProductId = dto.ProductId,
-                Qty = dto.Qty,
-                Price = product.Price,                 // ✅ 從 DB 拿
-                Total = dto.Qty * product.Price        // ✅ 後端算
-            };
+            // 3. 建立或累加 CartItem
+            var existingItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == dto.ProductId);
+            CartItem item;
 
-            await _repo.AddCartItemAsync(item);
+            if (existingItem != null)
+            {
+                // 已有相同商品 → 累加數量
+                existingItem.Qty += dto.Qty;
+                existingItem.Total = existingItem.Qty * existingItem.Price;
+                await _repo.UpdateCartItemAsync(existingItem);
+                item = existingItem;
+            }
+            else
+            {
+                // 新商品 → 新增一筆
+                item = new CartItem
+                {
+                    CartId = cart.Id,
+                    ProductId = dto.ProductId,
+                    Qty = dto.Qty,
+                    Price = product.Price,
+                    Total = dto.Qty * product.Price
+                };
+                await _repo.AddCartItemAsync(item);
+            }
 
             // 重新抓最新 cart（保證正確）
             var updatedCart = await _repo.GetCartByMemberIdAsync(memberId);
@@ -99,10 +104,10 @@ namespace southernTravel.Services
             };
         }
 
-        public async Task<CartItemDto> UpdateItemAsync(int cartItemId, UpdateCartItemDto dto)
+        public async Task<CartItemDto?> UpdateItemAsync(int cartItemId, UpdateCartItemDto dto)
         {
             var item = await _repo.GetCartItemWithCartAsync(cartItemId);
-            if (item == null) throw new Exception("CartItem not found");
+            if (item == null) return null;
 
             item.Qty = dto.Qty;
             item.Total = item.Qty * item.Price;
@@ -130,10 +135,10 @@ namespace southernTravel.Services
             };
         }
 
-        public async Task DeleteItemAsync(int cartItemId)
+        public async Task<bool> DeleteItemAsync(int cartItemId)
         {
             var item = await _repo.GetCartItemWithCartAsync(cartItemId);
-            if (item == null) throw new Exception("CartItem not found");
+            if (item == null) return false;
 
             var memberId = item.Cart!.MemberId;
 
@@ -146,6 +151,8 @@ namespace southernTravel.Services
             .Where(ci => ci.CartId == cart.Id)
             .SumAsync(ci => ci.Total);
             await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }
