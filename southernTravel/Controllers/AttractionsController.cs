@@ -17,6 +17,8 @@ public class AttractionsController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var result = await _service.GetAllAsync();
+        if (result == null || !result.Any())
+            return NotFound("目前尚無景點資料，請新增景點資料。");
         return Ok(result);
     }
 
@@ -26,7 +28,7 @@ public class AttractionsController : ControllerBase
         var result = await _service.GetByIdAsync(id);
 
         if (result == null)
-            return NotFound();
+            return NotFound($"找不到 ID 為 {id} 的景點資料，請確認後重試。");
 
         return Ok(result);
     }
@@ -44,9 +46,9 @@ public class AttractionsController : ControllerBase
         var success = await _service.UpdateAsync(id, dto);
 
         if (!success)
-            return NotFound();
+            return NotFound($"找不到 ID 為 {id} 的景點資料，無法進行更新。");
 
-        return Ok();
+        return Ok("更新成功");
     }
 
     [HttpDelete("{id}")]
@@ -55,8 +57,8 @@ public class AttractionsController : ControllerBase
         var success = await _service.DeleteAsync(id);
 
         if (!success)
-            return NotFound();
+            return NotFound($"找不到 ID 為 {id} 的景點資料，無法進行刪除。");
 
-        return Ok();
+        return Ok("刪除成功");
     }
 }
