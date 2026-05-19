@@ -1,28 +1,31 @@
 ﻿using southernTravel.Model;
+using System.ComponentModel.DataAnnotations;
 
 namespace southernTravel.DTOs
 {
     public class CreateProductDto
     {
+        [Required(ErrorMessage = "產品名稱不能為空。")]
         public string Title { get; set; } = string.Empty;
-
+        [Required(ErrorMessage = "產品分類不能為空。")]
         public string Category { get; set; } = string.Empty;
 
         public string? Tag1 { get; set; }
 
         public string? Tag2 { get; set; }
-
+        [Required(ErrorMessage = "產品天數不能為空。")]
         public int DayNum { get; set; }
-
         public string? Description { get; set; }
-
+        [Required(ErrorMessage = "產品原價不能為空。")]
         public decimal OriginPrice { get; set; }
+        [Required(ErrorMessage = "產品售價不能為空。")]
 
         public decimal Price { get; set; }
-
+        [Required(ErrorMessage = "產品數量不能為空。")]
+        public string? Unit { get; set; }
         public int Num { get; set; }
-
-        public string? MainImageUrl { get; set; }
+        [Required(ErrorMessage = "產品主圖不能為空。")]
+        public string MainImageUrl { get; set; } = string.Empty;
 
         public DateTime? StartDate { get; set; }
 
@@ -34,7 +37,7 @@ namespace southernTravel.DTOs
 
         public int? MaxTravelers { get; set; }
 
-        public List<ItineraryDto> Itineraries { get; set; } = new();
+        public List<CreateItineraryDto> Itineraries { get; set; } = new();
 
         // 一個商品 多張圖片
         public List<CreateProductImageDto> Images { get; set; } = new();
@@ -45,6 +48,7 @@ namespace southernTravel.DTOs
 
     public class UpdateProductDto
     {
+
         public string Title { get; set; } = string.Empty;
 
         public string Category { get; set; } = string.Empty;
@@ -53,15 +57,15 @@ namespace southernTravel.DTOs
 
         public string? Tag2 { get; set; }
 
+        public decimal OriginPrice { get; set; }
         public decimal Price { get; set; }
 
         public int DayNum { get; set; }
-
-        public string? MainImageUrl { get; set; }
-
+        public string MainImageUrl { get; set; } = string.Empty;
+            
+        public int Num { get; set; }
+        public string? Unit { get; set; }
         public string? Description { get; set; }
-
-        public string? Content { get; set; }
 
         public bool IsEnabled { get; set; }
 
@@ -76,7 +80,7 @@ namespace southernTravel.DTOs
         public int? MaxTravelers { get; set; }
 
         // 更新行程的內容
-        public List<ItineraryDto>? Itineraries { get; set; }
+        public List<CreateItineraryDto>? Itineraries { get; set; }
 
         // 一個商品 多張圖片
         public List<UpdateProductImageDto>? Images { get; set; }
@@ -99,12 +103,13 @@ namespace southernTravel.DTOs
         public int DayNum { get; set; }
 
         public string? Description { get; set; }
-
-        public string? Content { get; set; }
+        public int Num { get; set; }
+        public string? Unit { get; set; }
+        public decimal OriginPrice { get; set; }
 
         public decimal Price { get; set; }
 
-        public string? MainImageUrl { get; set; }
+        public string MainImageUrl { get; set; } = string.Empty;
 
         public bool IsEnabled { get; set; }
 

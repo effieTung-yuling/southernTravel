@@ -36,6 +36,9 @@ public class AttractionsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateAttractionDto dto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         var result = await _service.CreateAsync(dto);
         return Ok(result);
     }

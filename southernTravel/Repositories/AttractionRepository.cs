@@ -6,12 +6,13 @@ using southernTravel.Repositories;
 public class AttractionRepository : IAttractionRepository
 {
     private readonly AppDbContext _context;
-
+    // 建構子
     public AttractionRepository(AppDbContext context)
     {
         _context = context;
     }
-
+    // 實作 IAttractionRepository 介面的方法
+    // List<T>（這個 T 代表 Type，意思就是型別參數）
     public async Task<List<Attraction>> GetAllAsync()
     {
         return await _context.Attractions.ToListAsync();

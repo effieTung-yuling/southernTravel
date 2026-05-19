@@ -108,7 +108,7 @@ namespace southernTravel.Services
         {
             var item = await _repo.GetCartItemWithCartAsync(cartItemId);
             if (item == null) return null;
-
+            if(dto.ProductId != item.ProductId) return null; // 確保 productId 不變
             item.Qty = dto.Qty;
             item.Total = item.Qty * item.Price;
 

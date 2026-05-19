@@ -25,6 +25,8 @@ namespace southernTravel.Services
                 Category = x.Category,
                 Description = x.Description,
                 Price = x.Price,
+                OriginPrice = x.OriginPrice,
+                Num = x.Num,
                 MainImageUrl = x.MainImageUrl,
                 DayNum = x.DayNum,
                 Tag1= x.Tag1,
@@ -61,6 +63,8 @@ namespace southernTravel.Services
                 Category = x.Category,
                 Description = x.Description,
                 Price = x.Price,
+                OriginPrice = x.OriginPrice,
+                Num = x.Num,
                 // 將圖片映射到 DTO，並依 SortOrder 排序
                 Images = x.Images
                     .OrderBy(i => i.SortOrder)
@@ -140,7 +144,9 @@ namespace southernTravel.Services
                 Tag1 = result.Tag1,
                 Tag2 = result.Tag2,
                 DayNum = result.DayNum,
+                Num= result.Num,
                 Description = result.Description,
+                OriginPrice = result.OriginPrice,
                 Price = result.Price,
                 MainImageUrl = result.MainImageUrl,
                 IsEnabled = result.IsEnabled,
@@ -180,7 +186,9 @@ namespace southernTravel.Services
             product.Tag2 = dto.Tag2;
             product.DayNum = dto.DayNum;
             product.Description = dto.Description;
+            product.OriginPrice = dto.OriginPrice;
             product.Price = dto.Price;
+            product.Num = dto.Num;
             product.MainImageUrl = dto.MainImageUrl;
             product.IsEnabled = dto.IsEnabled;
             product.UpdatedAt = DateTime.UtcNow;
