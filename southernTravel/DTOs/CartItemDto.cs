@@ -1,4 +1,6 @@
-﻿namespace southernTravel.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace southernTravel.DTOs
 {
     public class CreateCartItemDto
     {
@@ -8,7 +10,12 @@
     }
     public class UpdateCartItemDto
     {
+        [Required(ErrorMessage = "ProductId 為必填欄位。")]
+        [Range(1, int.MaxValue, ErrorMessage = "ProductId 必須為正整數。")]
         public int ProductId { get; set; }
+
+        [Required(ErrorMessage = "數量為必填欄位。")]
+        [Range(1, int.MaxValue, ErrorMessage = "數量必須至少為 1。")]
         public int Qty { get; set; }
     }
 
