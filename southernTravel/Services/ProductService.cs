@@ -180,20 +180,21 @@ namespace southernTravel.Services
 
             if (product == null) return false;
 
-            product.Title = dto.Title;
-            product.Category = dto.Category;
-            product.Tag1 = dto.Tag1;
-            product.Tag2 = dto.Tag2;
-            product.DayNum = dto.DayNum;
-            product.Description = dto.Description;
-            product.OriginPrice = dto.OriginPrice;
-            product.Price = dto.Price;
-            product.Num = dto.Num;
-            product.MainImageUrl = dto.MainImageUrl;
-            product.IsEnabled = dto.IsEnabled;
+            if (dto.Title != null) product.Title = dto.Title;
+            if (dto.Category != null) product.Category = dto.Category;
+            if (dto.Tag1 != null) product.Tag1 = dto.Tag1;
+            if (dto.Tag2 != null) product.Tag2 = dto.Tag2;
+            if (dto.DayNum.HasValue) product.DayNum = dto.DayNum.Value;
+            if (dto.Description != null) product.Description = dto.Description;
+            if (dto.OriginPrice.HasValue) product.OriginPrice = dto.OriginPrice.Value;
+            if (dto.Price.HasValue) product.Price = dto.Price.Value;
+            if (dto.Num.HasValue) product.Num = dto.Num.Value;
+            if (dto.MainImageUrl != null) product.MainImageUrl = dto.MainImageUrl;
+            if (dto.IsEnabled.HasValue) product.IsEnabled = dto.IsEnabled.Value;
+            if (dto.MaxTravelers.HasValue) product.MaxTravelers = dto.MaxTravelers.Value;
             product.UpdatedAt = DateTime.UtcNow;
 
-            // ✅ ⭐重點：圖片「累加」不是覆蓋
+            // 圖片累加
             if (dto.Images != null && dto.Images.Any())
             {
                 var maxOrder = product.Images.Any() ? product.Images.Max(i => i.SortOrder) : 0;
@@ -207,7 +208,7 @@ namespace southernTravel.Services
                 foreach (var img in newImages) { product.Images.Add(img); }
             }
 
-            // 2. 行程處理 (Itineraries) - 同樣邏輯
+            // 行程累加
             if (dto.Itineraries != null && dto.Itineraries.Any())
             {
                 var newItineraries = dto.Itineraries.Select(i => new Itinerary
@@ -223,10 +224,9 @@ namespace southernTravel.Services
                 foreach (var it in newItineraries) { product.Itineraries.Add(it); }
             }
 
-            // 3. 景點關聯處理 (AttractionRefs) - 修正後的邏輯
+            // 景點關聯
             if (dto.AttractionRefs != null)
             {
-                // 建議做法：如果是更新，通常會先清空舊的關聯再重新建立，以達成「更新排序」或「刪除」的效果
                 product.AttractionRefs.Clear();
 
                 var newRefs = dto.AttractionRefs.Select((refItem, index) => new ProductAttractionRef
@@ -239,10 +239,7 @@ namespace southernTravel.Services
                     Attraction = null!
                 }).ToList();
 
-                foreach (var ar in newRefs)
-                {
-                    product.AttractionRefs.Add(ar);
-                }
+                foreach (var ar in newRefs) { product.AttractionRefs.Add(ar); }
             }
 
             await _productRepository.UpdateProductAsync(product);

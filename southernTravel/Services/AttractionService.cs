@@ -23,7 +23,8 @@ public class AttractionService : IAttractionService
             Category = x.Category,
             Description = x.Description,
             MainImageUrl = x.MainImageUrl,
-            Location = x.Location
+            Location = x.Location,
+            IsActive = x.IsActive
         }).ToList();
     }
     // 取得單一景點
@@ -40,7 +41,8 @@ public class AttractionService : IAttractionService
             Category = x.Category,
             Description = x.Description,
             MainImageUrl = x.MainImageUrl,
-            Location = x.Location
+            Location = x.Location,
+            IsActive = x.IsActive
         };
     }
 
@@ -80,7 +82,8 @@ public class AttractionService : IAttractionService
                 Category = result.Category,
                 Description = result.Description,
                 MainImageUrl = result.MainImageUrl,
-                Location = result.Location
+                Location = result.Location,           
+                IsActive = true,
             };
         }
 
@@ -90,12 +93,13 @@ public class AttractionService : IAttractionService
 
         if (attraction == null) return false;
 
-        attraction.Title = dto.Title;
-        attraction.Category = dto.Category;
-        attraction.Description = dto.Description;
-        attraction.MainImageUrl = dto.MainImageUrl;
-        attraction.Location = dto.Location;
-        attraction.IsActive = dto.IsActive;
+        if (dto.Title != null) attraction.Title = dto.Title;
+        if (dto.Category != null) attraction.Category = dto.Category;
+        if (dto.Description != null) attraction.Description = dto.Description;
+        if (dto.MainImageUrl != null) attraction.MainImageUrl = dto.MainImageUrl;
+        if (dto.Location != null) attraction.Location = dto.Location;
+        if (dto.IsActive.HasValue) attraction.IsActive = dto.IsActive.Value;
+
         attraction.UpdatedAt = DateTime.UtcNow;
 
         await _repository.UpdateAsync(attraction);

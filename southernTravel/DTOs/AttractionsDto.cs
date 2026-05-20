@@ -16,17 +16,12 @@
 
     public class UpdatedAttractionDto
     {
-        public string Title { get; set; } = string.Empty;
-
-        public string Category { get; set; } = string.Empty;
-
+        public string? Title { get; set; }
+        public string? Category { get; set; }
         public string? Description { get; set; }
-
         public string? MainImageUrl { get; set; }
-
         public string? Location { get; set; }
-
-        public bool IsActive { get; set; }
+        public bool? IsActive { get; set; }
     }
 
     public class AttractionDto
@@ -42,5 +37,6 @@
         public string? MainImageUrl { get; set; }
 
         public string? Location { get; set; }
+        public bool? IsActive { get; set; }
     }
 }

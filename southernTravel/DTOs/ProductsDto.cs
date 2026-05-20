@@ -48,26 +48,25 @@ namespace southernTravel.DTOs
 
     public class UpdateProductDto
     {
+        public string? Title { get; set; }
 
-        public string Title { get; set; } = string.Empty;
-
-        public string Category { get; set; } = string.Empty;
+        public string? Category { get; set; }
 
         public string? Tag1 { get; set; }
 
         public string? Tag2 { get; set; }
 
-        public decimal OriginPrice { get; set; }
-        public decimal Price { get; set; }
+        public decimal? OriginPrice { get; set; }
+        public decimal? Price { get; set; }
 
-        public int DayNum { get; set; }
-        public string MainImageUrl { get; set; } = string.Empty;
-            
-        public int Num { get; set; }
+        public int? DayNum { get; set; }
+        public string? MainImageUrl { get; set; }
+
+        public int? Num { get; set; }
         public string? Unit { get; set; }
         public string? Description { get; set; }
 
-        public bool IsEnabled { get; set; }
+        public bool? IsEnabled { get; set; }
 
         public DateTime? StartDate { get; set; }
 
