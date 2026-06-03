@@ -99,6 +99,10 @@ builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 builder.Services.AddScoped<IMemberService, MemberService>();
 builder.Services.AddScoped<IAttractionRepository, AttractionRepository>();
 builder.Services.AddScoped<IAttractionService, AttractionService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<OrderService>();
+builder.Services.AddScoped<OrderRepository>();
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
